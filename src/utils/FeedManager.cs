@@ -164,7 +164,7 @@ namespace com.comshak.FeedReader
 			}
 			catch (Exception ex)
 			{
-				Utils.DbgOutExc("BackgroundThread::GetNodeContent()", ex);
+				Utils.DbgOutExc("FeedManager::GetNodeContent()", ex);
 			}
 			return strContent;
 		}
@@ -205,7 +205,7 @@ namespace com.comshak.FeedReader
 			}
 			catch (Exception ex)
 			{
-				Utils.DbgOutExc("BackgroundThread::GetNodeContentFrom()", ex);
+				Utils.DbgOutExc("FeedManager::GetNodeContentFrom()", ex);
 			}
 			if (strReturn == null)
 			{
@@ -230,7 +230,7 @@ namespace com.comshak.FeedReader
 			}
 			catch (Exception ex)
 			{
-				Utils.DbgOutExc("BackgroundThread::GetNodeDate()", ex);
+				Utils.DbgOutExc("FeedManager::GetNodeDate()", ex);
 			}
 			return date;
 		}
