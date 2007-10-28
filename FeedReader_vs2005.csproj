@@ -73,6 +73,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AxInterop.SHDocVw, Version=1.1.0.0, Culture=neutral, PublicKeyToken=0f81f43dbbeb4151">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>obj\AxInterop.SHDocVw.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.mshtml">
       <Name>Microsoft.mshtml</Name>
       <HintPath>C:\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll</HintPath>
