@@ -33,26 +33,29 @@ namespace com.comshak.FeedReader
 				DateTime now = DateTime.FromFileTime(0);
 
 				string strFileName = Names.FeedsFolder + m_feedNode.FileName;
-				XmlDocument xmlDoc = new XmlDocument();
-				xmlDoc.Load(strFileName);
-
-				FeedManager = new FeedManager(xmlDoc.NameTable);
-				FeedManager.TransferNamespaces(xmlDoc);
-
-				XmlNodeList xmlNodes = xmlDoc.SelectNodes("/rss/channel//item");
-
-				foreach (XmlNode xmlNode in xmlNodes)
+				if (File.Exists(strFileName))
 				{
-					string strTitle = FeedManager.GetNodeContent(xmlNode, "title");
-					DateTime dtPublished = FeedManager.GetNodeDate(xmlNode, "pubDate", now);
-					DateTime dtReceived = FeedManager.GetNodeDate(xmlNode, "comshak:rcvDate", now);
-					string strAuthor = FeedManager.GetNodeContent(xmlNode, "author");
-					string strDesc = FeedManager.GetNodeContent(xmlNode, "description", NCEncoding.String, NCType.Text);
-					string strLink = FeedManager.GetNodeContent(xmlNode, "link");
+					XmlDocument xmlDoc = new XmlDocument();
+					xmlDoc.Load(strFileName);
 
-					Headline headline = new Headline(strTitle, dtPublished, dtReceived, strAuthor, strDesc);
-					headline.Link = strLink;
-					headlines.Add(headline);
+					FeedManager = new FeedManager(xmlDoc.NameTable);
+					FeedManager.TransferNamespaces(xmlDoc);
+
+					XmlNodeList xmlNodes = xmlDoc.SelectNodes("/rss/channel//item");
+
+					foreach (XmlNode xmlNode in xmlNodes)
+					{
+						string strTitle = FeedManager.GetNodeContent(xmlNode, "title");
+						DateTime dtPublished = FeedManager.GetNodeDate(xmlNode, "pubDate", now);
+						DateTime dtReceived = FeedManager.GetNodeDate(xmlNode, "comshak:rcvDate", now);
+						string strAuthor = FeedManager.GetNodeContent(xmlNode, "author");
+						string strDesc = FeedManager.GetNodeContent(xmlNode, "description", NCEncoding.String, NCType.Text);
+						string strLink = FeedManager.GetNodeContent(xmlNode, "link");
+
+						Headline headline = new Headline(strTitle, dtPublished, dtReceived, strAuthor, strDesc);
+						headline.Link = strLink;
+						headlines.Add(headline);
+					}
 				}
 			}
 			catch (FileNotFoundException ex)
