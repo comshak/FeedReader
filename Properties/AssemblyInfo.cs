@@ -55,7 +55,7 @@ using System.Security.Permissions;
 //       documentation for more information on this.
 //
 [assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile("..\\..\\comshak_keypair.snk")]
+//[assembly: AssemblyKeyFile("..\\..\\comshak_keypair.snk")]
 [assembly: AssemblyKeyName("")]
 
 [assembly: System.Runtime.InteropServices.ComVisible(false)]

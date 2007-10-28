@@ -46,7 +46,7 @@ namespace com.comshak.FeedReader
 					return AddOffset("-", datetime, tzoneIndex);
 				}
 			}
-			return XmlConvert.ToDateTime(datetime);
+			return XmlConvert.ToDateTime(datetime, XmlDateTimeSerializationMode.Local);
 		}
 
 		/// <summary>
@@ -166,7 +166,7 @@ namespace com.comshak.FeedReader
 				datetime = datetime + ":00";
 			}
 
-			DateTime toReturn = XmlConvert.ToDateTime(datetime);
+			DateTime toReturn = XmlConvert.ToDateTime(datetime, XmlDateTimeSerializationMode.Local);
 
 			try
 			{
