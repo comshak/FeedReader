@@ -92,12 +92,12 @@
                 <Reference
                     Name = "Interop.SHDocVw"
                     AssemblyName = "Interop.SHDocVw"
-                    HintPath = "obj\Interop.SHDocVw.dll"
+                    HintPath = "interop\dotnet11\Interop.SHDocVw.dll"
                 />
                 <Reference
                     Name = "AxInterop.SHDocVw"
                     AssemblyName = "AxInterop.SHDocVw"
-                    HintPath = "obj\AxInterop.SHDocVw.dll"
+                    HintPath = "interop\dotnet11\AxInterop.SHDocVw.dll"
                 />
                 <Reference
                     Name = "Microsoft.mshtml"

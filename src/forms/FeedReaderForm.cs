@@ -10,6 +10,9 @@ using System.Reflection;
 
 using mshtml;
 
+using AxSHDocVw = AxInterop.SHDocVw;
+using SHDocVw   = Interop.SHDocVw;
+
 namespace com.comshak.FeedReader
 {
 	/// <summary>
@@ -25,10 +28,7 @@ namespace com.comshak.FeedReader
 		private AxSHDocVw.AxWebBrowser axWebBrowser;
 		private System.Windows.Forms.ContextMenu contextMenu1;
 		private System.Windows.Forms.MenuItem menuItemUpdate;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private IContainer components;
 
 		#region My member fields
 		private System.Windows.Forms.ImageList		m_imgList;
@@ -102,7 +102,7 @@ namespace com.comshak.FeedReader
 		{
 			if (disposing)
 			{
-				if (components != null) 
+				if (components != null)
 				{
 					components.Dispose();
 				}
@@ -118,8 +118,9 @@ namespace com.comshak.FeedReader
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(FeedReaderForm));
-			this.mainMenu1 = new System.Windows.Forms.MainMenu();
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FeedReaderForm));
+			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
 			this.menuItemSave = new System.Windows.Forms.MenuItem();
 			this.menuItemFileSep1 = new System.Windows.Forms.MenuItem();
@@ -146,8 +147,8 @@ namespace com.comshak.FeedReader
 			this.colHdrReceived = new System.Windows.Forms.ColumnHeader();
 			this.colHdrAuthor = new System.Windows.Forms.ColumnHeader();
 			this.splitterH = new System.Windows.Forms.Splitter();
-			this.axWebBrowser = new AxSHDocVw.AxWebBrowser();
 			this.browserHeader1 = new com.comshak.FeedReader.BrowserHeader();
+			this.axWebBrowser = new AxSHDocVw.AxWebBrowser();
 			((System.ComponentModel.ISupportInitialize)(this.pnlStatus)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pnlProgress)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.axWebBrowser)).BeginInit();
@@ -156,16 +157,16 @@ namespace com.comshak.FeedReader
 			// mainMenu1
 			// 
 			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.menuItem1,
-																					  this.menuItemHelp});
+			this.menuItem1,
+			this.menuItemHelp});
 			// 
 			// menuItem1
 			// 
 			this.menuItem1.Index = 0;
 			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.menuItemSave,
-																					  this.menuItemFileSep1,
-																					  this.menuItemExit});
+			this.menuItemSave,
+			this.menuItemFileSep1,
+			this.menuItemExit});
 			this.menuItem1.Text = "&File";
 			// 
 			// menuItemSave
@@ -189,7 +190,7 @@ namespace com.comshak.FeedReader
 			// 
 			this.menuItemHelp.Index = 1;
 			this.menuItemHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																						 this.menuItemAbout});
+			this.menuItemAbout});
 			this.menuItemHelp.Text = "&Help";
 			// 
 			// menuItemAbout
@@ -200,20 +201,25 @@ namespace com.comshak.FeedReader
 			// 
 			// statusBarMain
 			// 
-			this.statusBarMain.Location = new System.Drawing.Point(0, 299);
+			this.statusBarMain.Location = new System.Drawing.Point(0, 338);
 			this.statusBarMain.Name = "statusBarMain";
 			this.statusBarMain.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
-																							 this.pnlStatus,
-																							 this.pnlProgress});
+			this.pnlStatus,
+			this.pnlProgress});
 			this.statusBarMain.ShowPanels = true;
-			this.statusBarMain.Size = new System.Drawing.Size(728, 22);
+			this.statusBarMain.Size = new System.Drawing.Size(759, 22);
 			this.statusBarMain.TabIndex = 0;
 			this.statusBarMain.Text = "statusBarMain";
 			// 
 			// pnlStatus
 			// 
 			this.pnlStatus.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
-			this.pnlStatus.Width = 612;
+			this.pnlStatus.Name = "pnlStatus";
+			this.pnlStatus.Width = 643;
+			// 
+			// pnlProgress
+			// 
+			this.pnlProgress.Name = "pnlProgress";
 			// 
 			// treeViewFeeds
 			// 
@@ -221,30 +227,28 @@ namespace com.comshak.FeedReader
 			this.treeViewFeeds.ContextMenu = this.contextMenu1;
 			this.treeViewFeeds.Dock = System.Windows.Forms.DockStyle.Left;
 			this.treeViewFeeds.HideSelection = false;
-			this.treeViewFeeds.ImageIndex = -1;
 			this.treeViewFeeds.Location = new System.Drawing.Point(0, 0);
 			this.treeViewFeeds.Name = "treeViewFeeds";
-			this.treeViewFeeds.SelectedImageIndex = -1;
-			this.treeViewFeeds.Size = new System.Drawing.Size(128, 299);
+			this.treeViewFeeds.Size = new System.Drawing.Size(128, 338);
 			this.treeViewFeeds.TabIndex = 1;
-			this.treeViewFeeds.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeViewFeeds_MouseDown);
+			this.treeViewFeeds.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeViewFeeds_DragDrop);
 			this.treeViewFeeds.DragOver += new System.Windows.Forms.DragEventHandler(this.treeViewFeeds_DragOver);
 			this.treeViewFeeds.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewFeeds_AfterSelect);
 			this.treeViewFeeds.DragEnter += new System.Windows.Forms.DragEventHandler(this.treeViewFeeds_DragEnter);
 			this.treeViewFeeds.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.treeViewFeeds_ItemDrag);
-			this.treeViewFeeds.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeViewFeeds_DragDrop);
+			this.treeViewFeeds.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeViewFeeds_MouseDown);
 			// 
 			// contextMenu1
 			// 
 			this.contextMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																						 this.menuItemUpdate,
-																						 this.menuItemSep1,
-																						 this.menuItemImport,
-																						 this.menuItemNewFolder,
-																						 this.menuItemSep2,
-																						 this.menuItemDelete,
-																						 this.menuItemSep3,
-																						 this.menuItemProperties});
+			this.menuItemUpdate,
+			this.menuItemSep1,
+			this.menuItemImport,
+			this.menuItemNewFolder,
+			this.menuItemSep2,
+			this.menuItemDelete,
+			this.menuItemSep3,
+			this.menuItemProperties});
 			// 
 			// menuItemUpdate
 			// 
@@ -296,7 +300,7 @@ namespace com.comshak.FeedReader
 			this.splitterV.BackColor = System.Drawing.SystemColors.Control;
 			this.splitterV.Location = new System.Drawing.Point(128, 0);
 			this.splitterV.Name = "splitterV";
-			this.splitterV.Size = new System.Drawing.Size(3, 299);
+			this.splitterV.Size = new System.Drawing.Size(3, 338);
 			this.splitterV.TabIndex = 2;
 			this.splitterV.TabStop = false;
 			this.splitterV.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitterV_SplitterMoved);
@@ -304,18 +308,19 @@ namespace com.comshak.FeedReader
 			// listViewHeadlines
 			// 
 			this.listViewHeadlines.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																								this.colHdrTitle,
-																								this.colHdrPublished,
-																								this.colHdrReceived,
-																								this.colHdrAuthor});
+			this.colHdrTitle,
+			this.colHdrPublished,
+			this.colHdrReceived,
+			this.colHdrAuthor});
 			this.listViewHeadlines.Dock = System.Windows.Forms.DockStyle.Top;
 			this.listViewHeadlines.FullRowSelect = true;
 			this.listViewHeadlines.HideSelection = false;
 			this.listViewHeadlines.Location = new System.Drawing.Point(131, 0);
 			this.listViewHeadlines.MultiSelect = false;
 			this.listViewHeadlines.Name = "listViewHeadlines";
-			this.listViewHeadlines.Size = new System.Drawing.Size(597, 152);
+			this.listViewHeadlines.Size = new System.Drawing.Size(628, 152);
 			this.listViewHeadlines.TabIndex = 3;
+			this.listViewHeadlines.UseCompatibleStateImageBehavior = false;
 			this.listViewHeadlines.View = System.Windows.Forms.View.Details;
 			this.listViewHeadlines.SelectedIndexChanged += new System.EventHandler(this.listViewHeadlines_SelectedIndexChanged);
 			// 
@@ -345,24 +350,10 @@ namespace com.comshak.FeedReader
 			this.splitterH.Dock = System.Windows.Forms.DockStyle.Top;
 			this.splitterH.Location = new System.Drawing.Point(131, 152);
 			this.splitterH.Name = "splitterH";
-			this.splitterH.Size = new System.Drawing.Size(597, 3);
+			this.splitterH.Size = new System.Drawing.Size(628, 3);
 			this.splitterH.TabIndex = 4;
 			this.splitterH.TabStop = false;
 			this.splitterH.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitterH_SplitterMoved);
-			// 
-			// axWebBrowser
-			// 
-			this.axWebBrowser.Enabled = true;
-			this.axWebBrowser.Location = new System.Drawing.Point(264, 208);
-			this.axWebBrowser.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWebBrowser.OcxState")));
-			this.axWebBrowser.Size = new System.Drawing.Size(597, 144);
-			this.axWebBrowser.TabIndex = 5;
-			this.axWebBrowser.StatusTextChange += new AxSHDocVw.DWebBrowserEvents2_StatusTextChangeEventHandler(this.axWebBrowser_StatusTextChange);
-			this.axWebBrowser.DownloadBegin += new System.EventHandler(this.axWebBrowser_DownloadBegin);
-			this.axWebBrowser.CommandStateChange += new AxSHDocVw.DWebBrowserEvents2_CommandStateChangeEventHandler(this.axWebBrowser_CommandStateChange);
-			this.axWebBrowser.NavigateComplete2 += new AxSHDocVw.DWebBrowserEvents2_NavigateComplete2EventHandler(this.axWebBrowser_NavigateComplete2);
-			this.axWebBrowser.DocumentComplete += new AxSHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(this.axWebBrowser_DocumentComplete);
-			this.axWebBrowser.BeforeNavigate2 += new AxSHDocVw.DWebBrowserEvents2_BeforeNavigate2EventHandler(this.axWebBrowser_BeforeNavigate2);
 			// 
 			// browserHeader1
 			// 
@@ -370,16 +361,30 @@ namespace com.comshak.FeedReader
 			this.browserHeader1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.browserHeader1.Location = new System.Drawing.Point(131, 155);
 			this.browserHeader1.Name = "browserHeader1";
-			this.browserHeader1.Size = new System.Drawing.Size(597, 31);
+			this.browserHeader1.Size = new System.Drawing.Size(628, 31);
 			this.browserHeader1.TabIndex = 6;
-			this.browserHeader1.ForwardButtonPressed += new System.EventHandler(this.browserHeader1_ForwardButtonPressed);
 			this.browserHeader1.GoButtonPressed += new System.EventHandler(this.browserHeader1_GoButtonPressed);
 			this.browserHeader1.BackButtonPressed += new System.EventHandler(this.browserHeader1_BackButtonPressed);
+			this.browserHeader1.ForwardButtonPressed += new System.EventHandler(this.browserHeader1_ForwardButtonPressed);
+			// 
+			// axWebBrowser
+			// 
+			this.axWebBrowser.Enabled = true;
+			this.axWebBrowser.Location = new System.Drawing.Point(137, 192);
+			this.axWebBrowser.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWebBrowser.OcxState")));
+			this.axWebBrowser.Size = new System.Drawing.Size(80, 80);
+			this.axWebBrowser.TabIndex = 5;
+			this.axWebBrowser.BeforeNavigate2 += new AxSHDocVw.DWebBrowserEvents2_BeforeNavigate2EventHandler(this.axWebBrowser_BeforeNavigate2);
+			this.axWebBrowser.StatusTextChange += new AxSHDocVw.DWebBrowserEvents2_StatusTextChangeEventHandler(this.axWebBrowser_StatusTextChange);
+			this.axWebBrowser.DownloadBegin += new System.EventHandler(this.axWebBrowser_DownloadBegin);
+			this.axWebBrowser.CommandStateChange += new AxSHDocVw.DWebBrowserEvents2_CommandStateChangeEventHandler(this.axWebBrowser_CommandStateChange);
+			this.axWebBrowser.DocumentComplete += new AxSHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(this.axWebBrowser_DocumentComplete);
+			this.axWebBrowser.NavigateComplete2 += new AxSHDocVw.DWebBrowserEvents2_NavigateComplete2EventHandler(this.axWebBrowser_NavigateComplete2);
 			// 
 			// FeedReaderForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(728, 321);
+			this.ClientSize = new System.Drawing.Size(759, 360);
 			this.Controls.Add(this.browserHeader1);
 			this.Controls.Add(this.axWebBrowser);
 			this.Controls.Add(this.splitterH);
@@ -391,9 +396,9 @@ namespace com.comshak.FeedReader
 			this.Menu = this.mainMenu1;
 			this.Name = "FeedReaderForm";
 			this.Text = "FeedReader";
+			this.Closed += new System.EventHandler(this.FeedReaderForm_Closed);
 			this.Resize += new System.EventHandler(this.FeedReaderForm_Resize);
 			this.Load += new System.EventHandler(this.FeedReaderForm_Load);
-			this.Closed += new System.EventHandler(this.FeedReaderForm_Closed);
 			((System.ComponentModel.ISupportInitialize)(this.pnlStatus)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pnlProgress)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.axWebBrowser)).EndInit();

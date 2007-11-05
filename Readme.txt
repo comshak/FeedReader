@@ -1,3 +1,7 @@
+[11/05/2007]
+Distilled the way interops should be named and generated from the command line, so I made a script for each .NET version
+that needs to be run BEFORE building the solution. The scripts are in interop/dotnet11 and interop/dotnet20.
+
 [10/22/2007]
 - made it so that when importing a feed, the temporary downloaded feed (from which feed information is 
   auto-discovered) is not disregarded, but transformed into the xml of the feed.
