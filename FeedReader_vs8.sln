@@ -1,6 +1,6 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeedReader_vs2008", "FeedReader_vs2008.csproj", "{F1D4FB27-C97B-4D2F-B2D6-16D6E4902C5F}"
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeedReader", "FeedReader_vs8.csproj", "{F1D4FB27-C97B-4D2F-B2D6-16D6E4902C5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
