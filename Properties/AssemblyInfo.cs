@@ -14,7 +14,7 @@ using System.Security.Permissions;
 [assembly: AssemblyProduct("FeedReader")]
 [assembly: AssemblyCopyright("comshak.com")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]	
+[assembly: AssemblyCulture("")]
 
 //
 // Version information for an assembly consists of the following four values:

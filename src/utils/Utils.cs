@@ -69,6 +69,7 @@ namespace com.comshak.FeedReader
 			try
 			{
 				HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
+				request.UserAgent = "Mozilla/5.0";
 				response = (HttpWebResponse) request.GetResponse();
 
 				if (response.StatusCode != HttpStatusCode.OK)

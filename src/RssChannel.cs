@@ -15,6 +15,7 @@ namespace com.comshak.FeedReader
 		#region Private Fields
 		private string    m_strTitle;
 		private string    m_strLink;
+		private string    m_strDescription;
 		private string    m_strGenerator;
 		private string    m_strFileName;
 		private ArrayList m_arrItems;
@@ -74,7 +75,7 @@ namespace com.comshak.FeedReader
 				existing.ReceivedDate = newItem.ReceivedDate;
 			}
 			string strPrefix = (bExisting) ? String.Empty : " NOT";
-			Debug.WriteLine(newItem.Title + " (" + newItem.PublishedDate.ToString() + ") was" + strPrefix + " already found in the channel.");
+			Debug.WriteLine(newItem.Title + " (" + newItem.PublishedDate + ") was" + strPrefix + " already found in the channel.");
 		}
 
 		#region Public Properties
@@ -88,6 +89,12 @@ namespace com.comshak.FeedReader
 		{
 			get { return m_strLink; }
 			set { m_strLink = value; }
+		}
+
+		public string Description
+		{
+			get { return m_strDescription; }
+			set { m_strDescription = value; }
 		}
 
 		public string Generator
@@ -127,6 +134,10 @@ namespace com.comshak.FeedReader
 
 				xmlWriter.WriteStartElement("link");
 				xmlWriter.WriteString(m_strLink);
+				xmlWriter.WriteEndElement();
+
+				xmlWriter.WriteStartElement("description");
+				xmlWriter.WriteString(m_strDescription);
 				xmlWriter.WriteEndElement();
 
 				xmlWriter.WriteStartElement("generator");
@@ -186,58 +197,7 @@ namespace com.comshak.FeedReader
 							{
 								rssItem = new RssItem();
 							}
-							string strValue = xmlReader.Value;
-							if (strElementName == "title")
-							{
-								rssItem.Title = strValue;
-//								if ((rssItem.Title.Length > 0) && (rssItem.PublishedDate.Ticks > 0))
-//								{
-//									if (ExistingItem(rssItem) != null)
-//									{
-//										xmlReader.Skip();
-//										xmlReader.Skip();
-//									}
-//								}
-								Debug.WriteLine("Found Title: " + strValue);
-							}
-							else if (strElementName == "link")
-							{
-								rssItem.Link = strValue;
-								Debug.WriteLine("Found Link: " + strValue);
-							}
-							else if (strElementName == "pubDate")
-							{
-								rssItem.Published = strValue;
-//								if ((rssItem.Title.Length > 0) && (rssItem.PublishedDate.Ticks > 0))
-//								{
-//									if (ExistingItem(rssItem) != null)
-//									{
-//										xmlReader.Skip();
-//										xmlReader.Skip();
-//									}
-//								}
-								Debug.WriteLine("Found Published: " + strValue);
-							}
-							else if (strElementName == "comshak:rcvDate")
-							{
-								DateTime dtRcv = DateTimeExt.Parse(strValue);
-								rssItem.ReceivedDate = dtRcv;
-								Debug.WriteLine("Found ReceivedDate: " + strValue + " ==> " + dtRcv.ToString());
-							}
-							else if (strElementName == "author")
-							{
-								rssItem.Author = strValue;
-								Debug.WriteLine("Found Author: " + strValue);
-							}
-							else if (strElementName == "description")
-							{
-								rssItem.Description = strValue;
-								Debug.WriteLine("Found Description: " + strValue);
-							}
-							else
-							{
-								Debug.WriteLine("Found Unknown " + strElementName + ": " + strValue);
-							}
+							rssItem.MergeElement(strElementName, xmlReader.Value);
 						}
 					}
 					else if (type == XmlNodeType.EndElement)

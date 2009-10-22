@@ -30,3 +30,18 @@ in other words it should not crash. Also should allow customizable folders (to c
 [4/30]
 - Fixed an error with saving the feeds.xml before shutting down the WriteFeeds thread, when closing the app.
 - Added an About dialog box, under the Help menu.
+
+[9/1/2009]
+Thinking of changing the template to:
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<body style="margin:0px">
+<div style="padding:5px 5px 10px 5px; background-color:#C0FFC8"><a href="$FEED_URL">$FEED_TITLE</a></div>
+<div style="margin:8px">
+$FEED_BODY
+</div>
+</body>
+</html>
+

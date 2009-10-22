@@ -154,11 +154,16 @@ namespace com.comshak.FeedReader
 					}
 					else if (nodeContent.m_ncType == NCType.Text)
 					{
-						strContent = node.InnerText;
+						strContent = System.Web.HttpUtility.HtmlDecode(node.InnerText);
 					}
 					else if (nodeContent.m_ncType == NCType.Xml)
 					{
 						strContent = node.InnerXml;
+					}
+
+					if (strContent != null)
+					{
+						strContent = strContent.Trim();
 					}
 				}
 			}

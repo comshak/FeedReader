@@ -69,6 +69,12 @@ namespace com.comshak.FeedReader
 //			"description"
 //		};
 		//-----------------------
+		static NodeContent[] s_arrRssPubDate = new NodeContent[]
+		{
+			new NodeContent("pubDate", NCEncoding.String, NCType.Text),
+			new NodeContent("dc:date", NCEncoding.String, NCType.Text)
+		};
+		//-----------------------
 		public UpdateChannelThread(FeedReaderForm form, FeedNode feedNode)
 		{
 			m_form = form;
@@ -163,7 +169,12 @@ namespace com.comshak.FeedReader
 			}
 		}
 
-		private void MergeFeeds(string strFileName, XmlDocument xmlRemote)
+		/// <summary>
+		/// Merges an update XML (in any format) into the older local RSS channel XML file.
+		/// </summary>
+		/// <param name="strFileName">File name/path of the local RSS channel XML file.</param>
+		/// <param name="xmlUpdate">XML of the update with the latest entries.</param>
+		private void MergeFeeds(string strFileName, XmlDocument xmlUpdate)
 		{
 			try
 			{
@@ -173,28 +184,30 @@ namespace com.comshak.FeedReader
 
 				if (m_feedFormat == FeedFormat.Rss || m_feedFormat == FeedFormat.Rss2)
 				{
-					rssChannel.Title = FeedManager.GetNodeContent(xmlRemote.DocumentElement, "/rss/channel/title");
-					rssChannel.Link = FeedManager.GetNodeContent(xmlRemote.DocumentElement, "/rss/channel/link");
+					rssChannel.Title = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/rss/channel/title");
+					rssChannel.Link = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/rss/channel/link");
+					rssChannel.Description = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/rss/channel/description");
 
-					WriteRssItems(xmlRemote, rssChannel);
+					WriteRssItems(xmlUpdate, rssChannel);
 				}
 				else if (m_feedFormat == FeedFormat.Atom)
 				{
 					FeedManager.AddNamespace("atom", strDefNamespace);
 
-					rssChannel.Title = FeedManager.GetNodeContent(xmlRemote.DocumentElement, "/atom:feed/atom:title");
-					rssChannel.Link = FeedManager.GetNodeContent(xmlRemote.DocumentElement, "/atom:feed/atom:link[@rel=\"alternate\" and @type=\"text/html\"]/@href");
+					rssChannel.Title = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/atom:feed/atom:title");
+					rssChannel.Link = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/atom:feed/atom:link[@rel=\"alternate\" and @type=\"text/html\"]/@href");
+					rssChannel.Description = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/atom:feed/atom:subtitle");
 
-					WriteAtomItems(xmlRemote, rssChannel);
+					WriteAtomItems(xmlUpdate, rssChannel);
 				}
 				else if (m_feedFormat == FeedFormat.Rdf)
 				{
 					FeedManager.AddNamespace("rss", strDefNamespace);
 
-					rssChannel.Title = FeedManager.GetNodeContent(xmlRemote.DocumentElement, "/rdf:RDF/rss:channel/rss:title");
-					rssChannel.Link = FeedManager.GetNodeContent(xmlRemote.DocumentElement, "/rdf:RDF/rss:channel/rss:link");
+					rssChannel.Title = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/rdf:RDF/rss:channel/rss:title");
+					rssChannel.Link = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/rdf:RDF/rss:channel/rss:link");
 
-					WriteRdfItems(xmlRemote, rssChannel);
+					WriteRdfItems(xmlUpdate, rssChannel);
 				}
 
 				rssChannel.Merge();
@@ -220,10 +233,11 @@ namespace com.comshak.FeedReader
 				RssItem rssItem = new RssItem();
 				rssItem.Title = FeedManager.GetNodeContent(xmlNode, "title");
 				rssItem.Link = FeedManager.GetNodeContent(xmlNode, "link");
-				rssItem.Published = FeedManager.GetNodeContent(xmlNode, "pubDate");
+				rssItem.Published = FeedManager.GetNodeContentFrom(xmlNode, s_arrRssPubDate, ref encoding);
 				rssItem.ReceivedDate = now;
 				rssItem.Author = FeedManager.GetNodeContentFrom(xmlNode, s_arrRssAuthor, ref encoding);
 				rssItem.Description = FeedManager.GetNodeContentFrom(xmlNode, s_arrRssDesc, ref encoding);
+				rssItem.Category = FeedManager.GetNodeContent(xmlNode, "category");
 				rssItem.Encoding = encoding;
 				rssChannel.AddItem(rssItem);
 			}

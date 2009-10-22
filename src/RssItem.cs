@@ -14,6 +14,7 @@ namespace com.comshak.FeedReader
 		private string   m_strLink = String.Empty;
 		private string   m_strDescription = String.Empty;
 		private string   m_strAuthor = String.Empty;
+		private string   m_strCategory = String.Empty;
 		private DateTime m_dtPublished;
 		private DateTime m_dtReceived;
 		private NCEncoding m_ncEncoding = NCEncoding.String;
@@ -44,12 +45,18 @@ namespace com.comshak.FeedReader
 
 		public string Published
 		{
+			get { return m_dtPublished.ToString(); }
 			set { m_dtPublished = DateTimeExt.Parse(value); }
 		}
 
 		public DateTime PublishedDate
 		{
 			get { return m_dtPublished; }
+		}
+
+		public string Received
+		{
+			get { return m_dtReceived.ToString(); }
 		}
 
 		public DateTime ReceivedDate
@@ -62,6 +69,12 @@ namespace com.comshak.FeedReader
 		{
 			set { m_strAuthor = value; }
 			get { return m_strAuthor; }
+		}
+
+		public string Category
+		{
+			get { return m_strCategory; }
+			set { m_strCategory = value; }
 		}
 
 		public NCEncoding Encoding
@@ -78,10 +91,10 @@ namespace com.comshak.FeedReader
 
 				WriteStringElement(xmlWriter, "title", m_strTitle);
 				WriteStringElement(xmlWriter, "link", m_strLink);
-				WriteStringElement(xmlWriter, "pubDate", m_dtPublished.ToString());
-				string strRcvDate = m_dtReceived.ToString();
-				WriteStringElement(xmlWriter, "comshak:rcvDate", strRcvDate);
+				WriteStringElement(xmlWriter, "pubDate", Published);
+				WriteStringElement(xmlWriter, "comshak:rcvDate", Received);
 				WriteStringElement(xmlWriter, "author", m_strAuthor);
+				WriteStringElement(xmlWriter, "category", m_strCategory);
 
 				if (m_ncEncoding == NCEncoding.Raw)
 				{
@@ -112,6 +125,50 @@ namespace com.comshak.FeedReader
 			xmlWriter.WriteStartElement(strElemName);
 			xmlWriter.WriteRaw(strText);
 			xmlWriter.WriteEndElement();
+		}
+
+		public void MergeElement(string name, string value)
+		{
+			if (name == "title")
+			{
+				m_strTitle = value;
+				Debug.WriteLine("Found Title: " + value);
+			}
+			else if (name == "link")
+			{
+				m_strLink = value;
+				Debug.WriteLine("Found Link: " + value);
+			}
+			else if (name == "pubDate")
+			{
+				Published = value;
+				Debug.WriteLine("Found Published: " + value);
+			}
+			else if (name == "comshak:rcvDate")
+			{
+				DateTime dtRcv = DateTimeExt.Parse(value);
+				m_dtReceived = dtRcv;
+				Debug.WriteLine("Found ReceivedDate: " + value + " ==> " + dtRcv.ToString());
+			}
+			else if (name == "author")
+			{
+				m_strAuthor = value;
+				Debug.WriteLine("Found Author: " + value);
+			}
+			else if (name == "description")
+			{
+				m_strDescription = value;
+				Debug.WriteLine("Found Description: " + value);
+			}
+			else if (name == "category")
+			{
+				m_strCategory = value;
+				Debug.WriteLine("Found Category: " + value);
+			}
+			else
+			{
+				Debug.WriteLine("Found Unknown " + name + ": " + value);
+			}
 		}
 	}
 }

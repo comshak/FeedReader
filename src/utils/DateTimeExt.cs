@@ -11,7 +11,10 @@ namespace com.comshak.FeedReader
 	/// </summary>
 	public sealed class DateTimeExt
 	{
-		private static Regex rfc2822 = new Regex(@"\s*(?:(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s*,\s*)?(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{2,})\s+(\d{2})\s*:\s*(\d{2})\s*(?::\s*(\d{2}))?\s+([+\-]\d{4}|UT|GMT|EST|EDT|CST|CDT|MST|MDT|PST|PDT|[A-IK-Z])", RegexOptions.Compiled);
+		private static Regex rfc2822 =
+			new Regex(@"\s*(?:(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s*,\s*)?(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{2,})\s+(\d{2})\s*:\s*(\d{2})\s*(?::\s*(\d{2}))?\s+([+\-]\d{4}|UT|GMT|EST|EDT|CST|CDT|MST|MDT|PST|PDT|[A-IK-Z])", RegexOptions.Compiled);
+		private static Regex rfc2822_nospace =
+			new Regex(@"\s*(?:(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s*,\s*)?(\d{1,2})\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*(\d{2,})\s*(\d{2})\s*:\s*(\d{2})\s*(?::\s*(\d{2}))?\s+([+\-]\d{4}|UT|GMT|EST|EDT|CST|CDT|MST|MDT|PST|PDT|[A-IK-Z])", RegexOptions.Compiled);
 		private static ArrayList months = new ArrayList(new string[]{"ZeroIndex","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec" });
 
 		//private static TimeSpan dayLightDelta = TimeZone.CurrentTimeZone.GetDaylightChanges(DateTime.Now.Year).Delta;
@@ -60,13 +63,15 @@ namespace com.comshak.FeedReader
 		public static DateTime Parse(string dateTimeString)
 		{
 			if (dateTimeString == null)
+			{
 				return DateTime.Now.ToUniversalTime();
-
+			}
 			if (dateTimeString.Trim().Length == 0)
+			{
 				return DateTime.Now.ToUniversalTime();
-
+			}
 			Match m = rfc2822.Match(dateTimeString);
-			if (m.Success) 
+			if (m.Success)
 			{
 				try
 				{
@@ -88,6 +93,28 @@ namespace com.comshak.FeedReader
 					throw new FormatException("RFC2822 date regex match succeeds, but parse the groups raises a '" + e.GetType().Name + "' exception.", e);
 				}
 			}
+			else if ((m = rfc2822_nospace.Match(dateTimeString)).Success)
+			{
+				try
+				{
+					int dd = Int32.Parse(m.Groups[1].Value);
+					int mth = months.IndexOf(m.Groups[2].Value);
+					int yy = Int32.Parse(m.Groups[3].Value);
+					// following year completion is compliant with RFC 2822.
+					yy = (yy < 50 ? 2000 + yy : (yy < 1000 ? 1900 + yy : yy));
+					int hh = Int32.Parse(m.Groups[4].Value);
+					int mm = Int32.Parse(m.Groups[5].Value);
+					int ss = Int32.Parse(m.Groups[6].Value);
+					string zone = m.Groups[7].Value;
+
+					DateTime xd = new DateTime(yy, mth, dd, hh, mm, ss);
+					return xd.AddHours(RFCTimeZoneToGMTBias(zone) * -1);
+				}
+				catch (Exception e)
+				{
+					throw new FormatException("RFC2822 date regex match succeeds, but parse the groups raises a '" + e.GetType().Name + "' exception.", e);
+				}
+			}
 			else
 			{
 				// fallback, if regex does not match:
@@ -100,7 +127,7 @@ namespace com.comshak.FeedReader
 		private DateTimeExt(){}
 
 		private struct TZB
-		{					
+		{
 			public TZB(string z, int b) { Zone = z; Bias = b; }
 			public string Zone;
 			public int Bias;

@@ -45,15 +45,16 @@ namespace com.comshak.FeedReader
 
 					foreach (XmlNode xmlNode in xmlNodes)
 					{
-						string strTitle = FeedManager.GetNodeContent(xmlNode, "title");
+						string title = FeedManager.GetNodeContent(xmlNode, "title");
 						DateTime dtPublished = FeedManager.GetNodeDate(xmlNode, "pubDate", now);
 						DateTime dtReceived = FeedManager.GetNodeDate(xmlNode, "comshak:rcvDate", now);
-						string strAuthor = FeedManager.GetNodeContent(xmlNode, "author");
-						string strDesc = FeedManager.GetNodeContent(xmlNode, "description", NCEncoding.String, NCType.Text);
-						string strLink = FeedManager.GetNodeContent(xmlNode, "link");
+						string author = FeedManager.GetNodeContent(xmlNode, "author");
+						string desc = FeedManager.GetNodeContent(xmlNode, "description", NCEncoding.String, NCType.Text);
+						string link = FeedManager.GetNodeContent(xmlNode, "link");
+						string categ = FeedManager.GetNodeContent(xmlNode, "category");
 
-						Headline headline = new Headline(strTitle, dtPublished, dtReceived, strAuthor, strDesc);
-						headline.Link = strLink;
+						Headline headline = new Headline(title, dtPublished, dtReceived, author, desc, categ);
+						headline.Link = link;
 						headlines.Add(headline);
 					}
 				}
