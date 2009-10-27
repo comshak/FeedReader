@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Xml;
 using System.Text;
@@ -70,8 +71,9 @@ namespace com.comshak.FeedReader
 			{
 				HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
 				request.UserAgent = "Mozilla/5.0";
-				response = (HttpWebResponse) request.GetResponse();
+				request.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip,deflate");
 
+				response = (HttpWebResponse) request.GetResponse();
 				if (response.StatusCode != HttpStatusCode.OK)
 				{
 					Debug.WriteLine("    Response StatusCode is \"" + response.StatusCode.ToString() +
@@ -79,13 +81,24 @@ namespace com.comshak.FeedReader
 					return null;
 				}
 
+				string contentEncoding = response.ContentEncoding.ToLower();
+
 				Debug.WriteLine("    Content type is " + response.ContentType);
 				Debug.WriteLine("    Content length is " + response.ContentLength);
-				Debug.WriteLine("    Content encoding is " + response.ContentEncoding);
+				Debug.WriteLine("    Content encoding is " + contentEncoding);
 				Debug.WriteLine("    Transfer encoding is " + response.Headers["Transfer-Encoding"]);
 
 				// Get the stream associated with the response.
 				Stream responseStream = response.GetResponseStream();
+
+				if (contentEncoding.Contains("gzip"))
+				{
+					responseStream = new GZipStream(responseStream, CompressionMode.Decompress);
+				}
+				else if (contentEncoding.Contains("deflate"))
+				{
+					responseStream = new DeflateStream(responseStream, CompressionMode.Decompress);
+				}
 
 				// Pipe the stream to a higher level stream reader with the required encoding format. 
 				readStream = new StreamReader(responseStream, Encoding.UTF8);
