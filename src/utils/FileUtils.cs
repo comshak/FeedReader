@@ -12,9 +12,11 @@ namespace com.comshak.FeedReader
 	{
 		public const string FeedsFolderInitial = @"feeds\";
 		public const string TempFolderInitial = @"temp\";
+		public const string MediaFolderInitial = @"media\";
 
 		private static string m_strFeedsFolder = ConstructPath(FeedsFolderInitial);
 		private static string m_strTempFolder = ConstructPath(TempFolderInitial);
+		private static string m_strMediaFolder = ConstructPath(MediaFolderInitial);
 
 		private FileUtils()
 		{
@@ -33,6 +35,14 @@ namespace com.comshak.FeedReader
 			get
 			{
 				return m_strTempFolder;
+			}
+		}
+
+		public static string MediaFolder
+		{
+			get
+			{
+				return m_strMediaFolder;
 			}
 		}
 

@@ -45,6 +45,36 @@ namespace com.comshak.FeedReader
 		}
 	}
 
+	public class Enclosure
+	{
+		public string Url;
+		public string Size;
+		public string Type;
+		public string File;
+
+		public bool Empty
+		{
+			get { return String.IsNullOrEmpty(Url); }
+		}
+
+		public int ListIcon
+		{
+			get
+			{
+				int img = 0;	// Text
+				if (!String.IsNullOrEmpty(Url))
+				{
+					if (!String.IsNullOrEmpty(File))
+					{
+						img = 2;	// Play
+					}
+					else img = 1;	// Download
+				}
+				return img;
+			}
+		}
+	}
+
 	/// <summary>
 	/// Summary description for FeedManager.
 	/// </summary>
@@ -132,6 +162,45 @@ namespace com.comshak.FeedReader
 			return format;
 		}
 
+		/// <summary>
+		/// Retrieves an enclosure object (if any) from the XmlNode.
+		/// </summary>
+		/// <param name="xmlNode"></param>
+		/// <returns></returns>
+		public Enclosure GetEnclosure(XmlNode xmlNode, string strXPath)
+		{
+			Enclosure enclosure = new Enclosure();
+			try
+			{
+				XmlNode node = null;
+				node = xmlNode.SelectSingleNode(strXPath);
+				if (node != null)
+				{
+					foreach (XmlAttribute xmlAttr in node.Attributes)
+					{
+						string attrName = xmlAttr.Name;
+						if (attrName == "url")
+						{
+							enclosure.Url = xmlAttr.InnerText;
+						}
+						else if (attrName == "length")
+						{
+							enclosure.Size = xmlAttr.InnerText;
+						}
+						else if (attrName == "type")
+						{
+							enclosure.Type = xmlAttr.InnerText;
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine(String.Format("{0} thrown in GetEnclosure(): {1}", ex.GetType(), ex.Message));
+			}
+			return enclosure;
+		}
+
 		public string GetNodeContent(XmlNode xmlNode, NodeContent nodeContent)
 		{
 			string strContent = null;
@@ -148,7 +217,11 @@ namespace com.comshak.FeedReader
 				}
 				if (node != null)
 				{
-					if ((node.ChildNodes.Count == 1) && (node.FirstChild.NodeType == XmlNodeType.CDATA))
+					if (nodeContent.m_ncType == NCType.Xml)
+					{
+						strContent = node.InnerXml;
+					}
+					else if ((node.ChildNodes.Count == 1) && (node.FirstChild.NodeType == XmlNodeType.CDATA))
 					{
 						strContent = node.InnerText;
 					}
@@ -156,16 +229,16 @@ namespace com.comshak.FeedReader
 					{
 						strContent = System.Web.HttpUtility.HtmlDecode(node.InnerText);
 					}
-					else if (nodeContent.m_ncType == NCType.Xml)
-					{
-						strContent = node.InnerXml;
-					}
 
 					if (strContent != null)
 					{
 						strContent = strContent.Trim();
 					}
 				}
+			}
+			catch (System.Xml.XPath.XPathException)
+			{
+				// This is fine: Namespace prefix 'xyz' is not defined.
 			}
 			catch (Exception ex)
 			{

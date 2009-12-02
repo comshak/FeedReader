@@ -140,6 +140,9 @@
     </Content>
     <Content Include="Readme.txt" />
     <Content Include="res\App.ico" />
+    <EmbeddedResource Include="res\play.ico" />
+    <EmbeddedResource Include="res\download.ico" />
+    <EmbeddedResource Include="res\text.ico" />
     <None Include="AppStrings.xsx">
       <DependentUpon>AppStrings.xsd</DependentUpon>
     </None>

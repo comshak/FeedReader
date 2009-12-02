@@ -52,8 +52,9 @@ namespace com.comshak.FeedReader
 						string desc = FeedManager.GetNodeContent(xmlNode, "description", NCEncoding.String, NCType.Text);
 						string link = FeedManager.GetNodeContent(xmlNode, "link");
 						string categ = FeedManager.GetNodeContent(xmlNode, "category");
+						Enclosure enc = FeedManager.GetEnclosure(xmlNode, "enclosure");
 
-						Headline headline = new Headline(title, dtPublished, dtReceived, author, desc, categ);
+						Headline headline = new Headline(title, dtPublished, dtReceived, author, desc, categ, enc);
 						headline.Link = link;
 						headlines.Add(headline);
 					}

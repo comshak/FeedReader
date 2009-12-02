@@ -15,6 +15,7 @@ namespace com.comshak.FeedReader
 		private string   m_strDescription = String.Empty;
 		private string   m_strAuthor = String.Empty;
 		private string   m_strCategory = String.Empty;
+		private Enclosure m_Enclosure;
 		private DateTime m_dtPublished;
 		private DateTime m_dtReceived;
 		private NCEncoding m_ncEncoding = NCEncoding.String;
@@ -77,6 +78,12 @@ namespace com.comshak.FeedReader
 			set { m_strCategory = value; }
 		}
 
+		public Enclosure Enclosure
+		{
+			get { return m_Enclosure; }
+			set { m_Enclosure = value; }
+		}
+
 		public NCEncoding Encoding
 		{
 			set { m_ncEncoding = value; }
@@ -105,6 +112,8 @@ namespace com.comshak.FeedReader
 					WriteStringElement(xmlWriter, "description", m_strDescription);
 				}
 
+				WriteEnclosure(xmlWriter, "enclosure");
+
 				xmlWriter.WriteEndElement();	// item
 			}
 			catch (Exception ex)
@@ -118,6 +127,18 @@ namespace com.comshak.FeedReader
 			xmlWriter.WriteStartElement(strElemName);
 			xmlWriter.WriteString(strText);
 			xmlWriter.WriteEndElement();
+		}
+
+		private void WriteEnclosure(XmlTextWriter xmlWriter, string strElemName)
+		{
+			if (m_Enclosure != null && !m_Enclosure.Empty)
+			{
+				xmlWriter.WriteStartElement(strElemName);
+				xmlWriter.WriteAttributeString("url", m_Enclosure.Url);
+				xmlWriter.WriteAttributeString("length", m_Enclosure.Size);
+				xmlWriter.WriteAttributeString("type", m_Enclosure.Type);
+				xmlWriter.WriteEndElement();
+			}
 		}
 
 		private void WriteRawElement(XmlTextWriter xmlWriter, string strElemName, string strText)

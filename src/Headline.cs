@@ -65,9 +65,10 @@ namespace com.comshak.FeedReader
 		private string m_strDesc;
 		private string m_strLink;
 		private string m_strCategory;
+		private Enclosure m_enclosure;
 		#endregion
 
-		public Headline(string title, DateTime dtPublished, DateTime dtReceived, string author, string desc, string category)
+		public Headline(string title, DateTime dtPublished, DateTime dtReceived, string author, string desc, string category, Enclosure enc)
 		{
 			m_strTitle = title;
 			m_datePublished = dtPublished;
@@ -75,6 +76,7 @@ namespace com.comshak.FeedReader
 			m_strAuthor = author;
 			m_strDesc = desc;
 			m_strCategory = category;
+			m_enclosure = enc;
 		}
 
 		#region Public Properties
@@ -96,6 +98,11 @@ namespace com.comshak.FeedReader
 		public string Category
 		{
 			get { return m_strCategory; }
+		}
+
+		public Enclosure Enclosure
+		{
+			get { return m_enclosure; }
 		}
 
 		public DateTime DatePublished

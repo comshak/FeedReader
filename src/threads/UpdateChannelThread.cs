@@ -128,7 +128,7 @@ namespace com.comshak.FeedReader
 				string strFileName = Names.FeedsFolder + m_feedNode.FileName;
 
 				XmlDocument xmlResponse = null;
-				if (!Utils.IsNullOrEmpty(m_strTempFeedFile))
+				if (!String.IsNullOrEmpty(m_strTempFeedFile))
 				{
 					if (System.IO.File.Exists(m_strTempFeedFile))
 					{
@@ -160,12 +160,13 @@ namespace com.comshak.FeedReader
 			}
 			finally
 			{
+				if (!String.IsNullOrEmpty(m_strTempFeedFile))
+				{
 #if DEBUG
-				Utils.MoveFile(m_strTempFeedFile, Names.FeedsFolder + m_feedNode.FileName + ".xml");
-				Utils.DeleteFile(m_strTempFeedFile);
-#else
-				Utils.DeleteFile(m_strTempFeedFile);
+					Utils.MoveFile(m_strTempFeedFile, Names.FeedsFolder + m_feedNode.FileName + ".xml");
 #endif
+					Utils.DeleteFile(m_strTempFeedFile);
+				}
 			}
 		}
 
@@ -239,6 +240,7 @@ namespace com.comshak.FeedReader
 				rssItem.Description = FeedManager.GetNodeContentFrom(xmlNode, s_arrRssDesc, ref encoding);
 				rssItem.Category = FeedManager.GetNodeContent(xmlNode, "category");
 				rssItem.Encoding = encoding;
+				rssItem.Enclosure = FeedManager.GetEnclosure(xmlNode, "enclosure");
 				rssChannel.AddItem(rssItem);
 			}
 		}

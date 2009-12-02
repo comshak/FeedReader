@@ -60,6 +60,7 @@ namespace com.comshak.FeedReader
 		private com.comshak.FeedReader.BrowserHeader browserHeader1;
 		private ColumnHeader colHdrCategory;
 		private MenuItem menuItemGC;
+		private ColumnHeader colHdrIcon;
 		private com.comshak.FeedReader.FeedNode		m_dragNode;		// Node being dragged
 		#endregion
 
@@ -81,26 +82,31 @@ namespace com.comshak.FeedReader
 			m_rootFeedNode = new FeedNode("Feeds", null, null, true);
 			m_imgList = new ImageList();
 			Assembly a = Assembly.GetExecutingAssembly();
-			m_imgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.folder.ico")));		// 0
+			m_imgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.folder.ico")));	// 0
 			m_imgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.feed.ico")));		// 1
-			m_imgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.sync.ico")));	// 2
+			m_imgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.sync.ico")));		// 2
 			treeViewFeeds.ImageList = m_imgList;
 
 			AssemblyName an = a.GetName();
 			Text = an.Name + " v" + an.Version;
 
 			this.Size = new Size(1024, 768);
+			ImageList lvImgList = new ImageList();
+			lvImgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.text.ico")));		// 0
+			lvImgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.download.ico")));	// 1
+			lvImgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.play.ico")));		// 2
+			listViewHeadlines.SmallImageList = lvImgList;
 			listViewHeadlines.Height = (this.ClientSize.Height - statusBarMain.Height) / 2;
 			treeViewFeeds.Width = 250;
-			colHdrTitle.Width = 325;
-			colHdrPublished.Width = 134;
-			colHdrReceived.Width = 134;
-			colHdrAuthor.Width = 150;
-			colHdrCategory.Width = 150;
+			colHdrIcon.Width = 18;
+			colHdrTitle.Width = 285;
+			colHdrPublished.Width = 130;
+			colHdrReceived.Width = 130;
+			colHdrAuthor.Width = 100;
+			colHdrCategory.Width = 80;
 
 			RepositionBrowser();
 		}
-
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -116,7 +122,6 @@ namespace com.comshak.FeedReader
 			}
 			base.Dispose(disposing);
 		}
-
 
 		#region Windows Form Designer generated code
 		/// <summary>
@@ -150,6 +155,7 @@ namespace com.comshak.FeedReader
 			this.menuItemProperties = new System.Windows.Forms.MenuItem();
 			this.splitterV = new System.Windows.Forms.Splitter();
 			this.listViewHeadlines = new System.Windows.Forms.ListView();
+			this.colHdrIcon = new System.Windows.Forms.ColumnHeader();
 			this.colHdrTitle = new System.Windows.Forms.ColumnHeader();
 			this.colHdrPublished = new System.Windows.Forms.ColumnHeader();
 			this.colHdrReceived = new System.Windows.Forms.ColumnHeader();
@@ -324,6 +330,7 @@ namespace com.comshak.FeedReader
 			// listViewHeadlines
 			// 
 			this.listViewHeadlines.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colHdrIcon,
             this.colHdrTitle,
             this.colHdrPublished,
             this.colHdrReceived,
@@ -336,15 +343,23 @@ namespace com.comshak.FeedReader
 			this.listViewHeadlines.MultiSelect = false;
 			this.listViewHeadlines.Name = "listViewHeadlines";
 			this.listViewHeadlines.Size = new System.Drawing.Size(628, 152);
-			this.listViewHeadlines.TabIndex = 3;
+			this.listViewHeadlines.TabIndex = 2;
 			this.listViewHeadlines.UseCompatibleStateImageBehavior = false;
 			this.listViewHeadlines.View = System.Windows.Forms.View.Details;
+			this.listViewHeadlines.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listViewHeadlines_MouseClick);
 			this.listViewHeadlines.SelectedIndexChanged += new System.EventHandler(this.listViewHeadlines_SelectedIndexChanged);
+			this.listViewHeadlines.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listViewHeadlines_MouseMove);
+			this.listViewHeadlines.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.listViewHeadlines_ColumnWidthChanging);
+			// 
+			// colHdrIcon
+			// 
+			this.colHdrIcon.Text = "";
+			this.colHdrIcon.Width = 18;
 			// 
 			// colHdrTitle
 			// 
 			this.colHdrTitle.Text = "Title";
-			this.colHdrTitle.Width = 205;
+			this.colHdrTitle.Width = 186;
 			// 
 			// colHdrPublished
 			// 
@@ -436,7 +451,6 @@ namespace com.comshak.FeedReader
 			NavigateTo("about:blank");
 		}
 
-
 		/// <summary>
 		/// Utility method to make the WebBrowser control navigate to a URL.
 		/// </summary>
@@ -479,7 +493,6 @@ namespace com.comshak.FeedReader
 			NavigateTo("about:blank");
 		}
 
-
 		/// <summary>
 		/// Recursive method to update all the feeds within a folder and all its subfolders.
 		/// </summary>
@@ -504,7 +517,6 @@ namespace com.comshak.FeedReader
 				}
 			}
 		}
-
 
 		/// <summary>
 		/// Occurs when a mouse button is pressed.
@@ -552,7 +564,6 @@ namespace com.comshak.FeedReader
 			}
 		}
 
-
 		//-----------------------------------------------------------------------------------------
 
 		#region Event handlers for the Context Menu.
@@ -577,7 +588,6 @@ namespace com.comshak.FeedReader
 				thread.Start();
 			}
 		}
-
 
 		/// <summary>
 		/// Event handler for the "Import feed..." context menu item.
@@ -752,6 +762,14 @@ namespace com.comshak.FeedReader
 			}
 		}
 
+		private void listViewHeadlines_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+		{
+			if (e.ColumnIndex == 0)	// Prevent resizing the icon column
+			{
+				e.Cancel = true;
+				e.NewWidth = 18;
+			}
+		}
 
 		public void OnEnd_ParseFeeds()
 		{
@@ -773,7 +791,6 @@ namespace com.comshak.FeedReader
 			}
 		}
 
-
 		public void OnEnd_ReadChannel(HeadlineCollection headlines)
 		{
 			bool bUpdating = false;
@@ -790,8 +807,10 @@ namespace com.comshak.FeedReader
 				{
 					foreach (Headline headline in headlines)
 					{
-						ListViewItem item = new ListViewItem(headline.Title);
+						ListViewItem item = new ListViewItem(String.Empty, headline.Enclosure.ListIcon);
 						item.Tag = headline;
+
+						item.SubItems.Add(headline.Title);
 
 						string strDatePublished;
 						DateTime dtDatePublished = headline.DatePublished;
@@ -841,7 +860,6 @@ namespace com.comshak.FeedReader
 			}
 		}
 
-
 		public void OnBegin_UpdateChannel(FeedNode feedNode)
 		{
 			TreeNode tn = (TreeNode)feedNode.Tag;
@@ -851,7 +869,6 @@ namespace com.comshak.FeedReader
 				tn.SelectedImageIndex = 2;
 			}
 		}
-
 
 		public void OnEnd_UpdateChannel(FeedNode feedNode)
 		{
@@ -877,7 +894,6 @@ namespace com.comshak.FeedReader
 				NavigateTo("about:blank");
 			}
 		}
-
 
 		/// <summary>
 		/// Occurs when the WebBrowser control finishes loading a document.
@@ -951,19 +967,16 @@ namespace com.comshak.FeedReader
 //			}
 		}
 
-
 		private void axWebBrowser_DownloadBegin(object sender, System.EventArgs e)
 		{
 			//pnlStatus.Text = "Loading...";
 		}
-
 
 		private void axWebBrowser_StatusTextChange(object sender, AxSHDocVw.DWebBrowserEvents2_StatusTextChangeEvent e)
 		{
 			pnlStatus.Text = e.text;
 		}
 
-		
 		/// <summary>
 		/// Occurs when the user begins dragging an item.
 		/// </summary>
@@ -981,7 +994,6 @@ namespace com.comshak.FeedReader
 				this.DoDragDrop(fn, DragDropEffects.Move);
 			}
 		}
-
 
 		/// <summary>
 		/// Occurs when the mouse drags an item and is moving over the client area of this Control.
@@ -1014,7 +1026,6 @@ namespace com.comshak.FeedReader
 			}
 		}
 
-
 		/// <summary>
 		/// Occurs when the mouse drags an item into the client area for this Control.
 		/// </summary>
@@ -1024,7 +1035,6 @@ namespace com.comshak.FeedReader
 		{
 			Debug.WriteLine("DragEnter()");
 		}
-
 
 		/// <summary>
 		/// Occurs when the mouse drags an item and the user releases the mouse indicating
@@ -1056,7 +1066,6 @@ namespace com.comshak.FeedReader
 			m_dragNode = null;
 		}
 
-
 		/// <summary>
 		/// Finds a tree node in the TreeView by the node's coordinates.
 		/// </summary>
@@ -1082,7 +1091,6 @@ namespace com.comshak.FeedReader
 			return null;
 		}
 
-
 		/// <summary>
 		/// Menu handler for File->Exit.
 		/// </summary>
@@ -1095,7 +1103,6 @@ namespace com.comshak.FeedReader
 			Application.Exit();
 		}
 
-
 		/// <summary>
 		/// Menu handler for File->Save.
 		/// </summary>
@@ -1105,7 +1112,6 @@ namespace com.comshak.FeedReader
 		{
 			WriteFeedsThread.QueueJob(m_rootFeedNode);
 		}
-
 
 		/// <summary>
 		/// Occurs whenever the user closes the form, after the form has been closed.
@@ -1148,54 +1154,45 @@ namespace com.comshak.FeedReader
 			axWebBrowser.Height = statusBarMain.Top - axWebBrowser.Top;
 		}
 
-
 		private void FeedReaderForm_Resize(object sender, System.EventArgs e)
 		{
 			RepositionBrowser();
 		}
-
 
 		private void splitterH_SplitterMoved(object sender, System.Windows.Forms.SplitterEventArgs e)
 		{
 			RepositionBrowser();
 		}
 
-
 		private void splitterV_SplitterMoved(object sender, System.Windows.Forms.SplitterEventArgs e)
 		{
 			RepositionBrowser();
 		}
-
 
 		private void browserHeader1_GoButtonPressed(object sender, System.EventArgs e)
 		{
 			NavigateTo(browserHeader1.Address);
 		}
 
-
 		private void browserHeader1_BackButtonPressed(object sender, System.EventArgs e)
 		{
 			axWebBrowser.GoBack();
 		}
-
 
 		private void browserHeader1_ForwardButtonPressed(object sender, System.EventArgs e)
 		{
 			axWebBrowser.GoForward();
 		}
 
-
 		private void axWebBrowser_BeforeNavigate2(object sender, AxSHDocVw.DWebBrowserEvents2_BeforeNavigate2Event e)
 		{
 			//browserHeader1.Address = (string) e.uRL;
 		}
 
-
 		private void axWebBrowser_NavigateComplete2(object sender, AxSHDocVw.DWebBrowserEvents2_NavigateComplete2Event e)
 		{
 			browserHeader1.Address = (string) e.uRL;
 		}
-
 
 		/// <summary>
 		/// Fires when the enabled state of a command changes.
@@ -1211,6 +1208,54 @@ namespace com.comshak.FeedReader
 			else if (e.command == (int)SHDocVw.CommandStateChangeConstants.CSC_NAVIGATEFORWARD)
 			{
 				browserHeader1.EnableForward(e.enable);
+			}
+		}
+
+		private void listViewHeadlines_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (e.X < 19)
+			{
+				ListViewItem item = listViewHeadlines.GetItemAt(e.X, e.Y);
+
+				if (item != null && item.Tag != null)
+				{
+					Headline headline = item.Tag as Headline;
+					if (headline != null)
+					{
+						if (headline.Enclosure.ListIcon > 0)
+						{
+							listViewHeadlines.Cursor = Cursors.Hand;
+							return;
+						}
+					}
+				}
+			}
+			listViewHeadlines.Cursor = this.Cursor;
+		}
+
+		private void listViewHeadlines_MouseClick(object sender, MouseEventArgs e)
+		{
+			if (e.X < 19)
+			{
+				ListViewItem item = listViewHeadlines.GetItemAt(e.X, e.Y);
+
+				if (item != null && item.Tag != null)
+				{
+					Headline headline = item.Tag as Headline;
+					if (headline != null)
+					{
+						if (headline.Enclosure.ListIcon == 1)
+						{
+							// Download media
+							MessageBox.Show("Download media");
+						}
+						else if (headline.Enclosure.ListIcon == 2)
+						{
+							// Play media
+							MessageBox.Show("Play media");
+						}
+					}
+				}
 			}
 		}
 	}
