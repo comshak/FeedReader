@@ -61,25 +61,34 @@ namespace com.comshak.FeedReader
 		/// <param name="url"></param>
 		/// <param name="strDumpFile"></param>
 		/// <returns></returns>
-		public static XmlDocument DownloadXml(string url, string strDumpFile)
+		public static XmlDocument DownloadXml(string url, string strDumpFile, /*[in, out]*/ ref DateTime dtLastUpdate)
 		{
 			Debug.WriteLine("--> DownloadXml(" + url + ", " + strDumpFile + ")");
 			HttpWebResponse response = null;
 			StreamReader readStream = null;
 			XmlDocument xmlResponse = null;
+
 			try
 			{
-				HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 				request.UserAgent = "Mozilla/5.0";
 				request.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip,deflate");
+				if (dtLastUpdate > DateTime.MinValue)
+				{
+					request.IfModifiedSince = dtLastUpdate;
+				}
 
-				response = (HttpWebResponse) request.GetResponse();
+				DateTime now = DateTime.Now;
+
+				response = (HttpWebResponse)request.GetResponse();
 				if (response.StatusCode != HttpStatusCode.OK)
 				{
 					Debug.WriteLine("    Response StatusCode is \"" + response.StatusCode.ToString() +
 						"\" and StatusDescription is: " + response.StatusDescription);
 					return null;
 				}
+
+				dtLastUpdate = DateTime.Now;
 
 				string contentEncoding = response.ContentEncoding.ToLower();
 
@@ -122,6 +131,17 @@ namespace com.comshak.FeedReader
 
 				xmlResponse = new XmlDocument();
 				xmlResponse.LoadXml(strResponse);
+			}
+			catch (WebException webex)
+			{
+				if (webex.Response == null && webex.Status != WebExceptionStatus.ProtocolError)
+				{
+					throw;
+				}
+				else
+				{	// it's okay - it's probably a 304 error.
+					Debug.WriteLine(String.Format("The feed has not changed since {0}", dtLastUpdate));
+				}
 			}
 			catch (Exception ex)
 			{

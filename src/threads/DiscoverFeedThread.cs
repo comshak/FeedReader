@@ -38,8 +38,9 @@ namespace com.comshak.FeedReader
 		{
 			try
 			{
+				DateTime dtLastUpdate = DateTime.MinValue;
 				m_strTempFeedFile = FileUtils.FeedsFolder + "_temp_" + Guid.NewGuid().ToString() + ".xml";
-				XmlDocument xmlFeed = Utils.DownloadXml(m_strFeedUrl, m_strTempFeedFile);
+				XmlDocument xmlFeed = Utils.DownloadXml(m_strFeedUrl, m_strTempFeedFile, ref dtLastUpdate);
 				if (xmlFeed != null)
 				{
 					FeedManager = new FeedManager(xmlFeed.NameTable);

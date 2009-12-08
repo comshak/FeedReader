@@ -81,6 +81,7 @@ namespace com.comshak.FeedReader
 	public class FeedManager
 	{
 		protected XmlNamespaceManager m_nsManager;
+		private DateTime m_dtLastUpdated;
 
 		public FeedManager(XmlNameTable xmlNameTable)
 		{
@@ -96,6 +97,12 @@ namespace com.comshak.FeedReader
 			{
 				return m_nsManager.DefaultNamespace;
 			}
+		}
+
+		public DateTime LastUpdated
+		{
+			get { return m_dtLastUpdated; }
+			set { m_dtLastUpdated = value; }
 		}
 
 		public void AddNamespace(string prefix, string uri)
@@ -172,8 +179,7 @@ namespace com.comshak.FeedReader
 			Enclosure enclosure = new Enclosure();
 			try
 			{
-				XmlNode node = null;
-				node = xmlNode.SelectSingleNode(strXPath);
+				XmlNode node = xmlNode.SelectSingleNode(strXPath);
 				if (node != null)
 				{
 					foreach (XmlAttribute xmlAttr in node.Attributes)

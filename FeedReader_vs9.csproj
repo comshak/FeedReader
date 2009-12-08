@@ -218,6 +218,7 @@
     <Compile Include="src\utils\Utils.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\utils\XPath.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -19,7 +19,7 @@ namespace com.comshak.FeedReader
 		private string    m_strGenerator;
 		private string    m_strFileName;
 		private ArrayList m_arrItems;
-		private string    m_strXPath;
+		private DateTime  m_dtLastUpdated;
 		#endregion
 
 		public RssChannel()
@@ -107,6 +107,11 @@ namespace com.comshak.FeedReader
 		{
 			set { m_strFileName = value.Trim(); }
 		}
+
+		public DateTime LastUpdated
+		{
+			set { m_dtLastUpdated = value; }
+		}
 		#endregion
 
 		public IEnumerator GetEnumerator()
@@ -144,6 +149,10 @@ namespace com.comshak.FeedReader
 				xmlWriter.WriteString(m_strGenerator);
 				xmlWriter.WriteEndElement();
 
+				xmlWriter.WriteStartElement("comshak:lastUpdate");
+				xmlWriter.WriteString(m_dtLastUpdated.ToString());
+				xmlWriter.WriteEndElement();
+
 				IEnumerator enumItems = GetEnumerator();
 				while (enumItems.MoveNext())
 				{// Write all children
@@ -169,6 +178,7 @@ namespace com.comshak.FeedReader
 		// Be sure to keep the date from the existing item (copy it to the current element).
 		public void Merge()
 		{
+			XmlTextReader xmlReader = null;
 			try
 			{
 				if (!File.Exists(m_strFileName))
@@ -177,17 +187,18 @@ namespace com.comshak.FeedReader
 					return;
 				}
 
-				XmlTextReader xmlReader = new XmlTextReader(m_strFileName);
-
 				string strElementName;
+				XPath xPath = new XPath();
 				RssItem rssItem = null;
+
+				xmlReader = new XmlTextReader(m_strFileName);
 				while (xmlReader.Read())
 				{
 					XmlNodeType type = xmlReader.NodeType;
 					if (type == XmlNodeType.Element)
 					{
 						strElementName = xmlReader.Name;
-						if (!xmlReader.IsEmptyElement && UpdateXPath(strElementName, true) == "/rss/channel/item")
+						if (!xmlReader.IsEmptyElement && xPath.AddElement(strElementName) == "/rss/channel/item")
 						{
 							if (!xmlReader.Read() || (xmlReader.NodeType != XmlNodeType.Text))
 							{
@@ -203,66 +214,26 @@ namespace com.comshak.FeedReader
 					else if (type == XmlNodeType.EndElement)
 					{
 						strElementName = xmlReader.Name;
-						UpdateXPath(strElementName, false);
-						if ((strElementName == "item") && (m_strXPath == "/rss/channel") && (rssItem != null))
+						xPath.RemoveElement(strElementName);
+						if ((strElementName == "item") && xPath.Equals("/rss/channel") && (rssItem != null))
 						{
 							AddIfNew(rssItem);
 							rssItem = null;
 						}
 					}
 				}
-				xmlReader.Close();
 				Write();
 			}
 			catch (Exception ex)
 			{
 				Utils.DbgOutExc("RssChannel::Merge()", ex);
 			}
-		}
-
-		private string UpdateXPath(string strElementName, bool bAdding)
-		{
-			string strLastXPath;
-			if ((m_strXPath == null) || (m_strXPath.Length == 0))
+			finally
 			{
-				m_strXPath = "/";
-			}
-
-			strLastXPath = m_strXPath;
-
-			if (bAdding == true)
-			{
-				if ((strElementName == null) || (strElementName.Length == 0))
+				if (xmlReader != null)
 				{
-					Debug.WriteLine("Error: Nothing to add!");
-					return strLastXPath;
+					xmlReader.Close();
 				}
-				if (m_strXPath != "/")
-				{
-					m_strXPath += "/";
-				}
-				m_strXPath += strElementName;
-				return strLastXPath;
-			}
-			else
-			{
-				if (m_strXPath == "/")
-				{
-					Debug.WriteLine("Error: Nothing to remove!");
-					return String.Empty;
-				}
-
-				int iPos = m_strXPath.LastIndexOf('/');
-				if ((iPos < 0) ||
-					(m_strXPath[iPos] != '/') ||
-					(m_strXPath.Substring(iPos + 1) != strElementName))
-				{
-					Debug.WriteLine("Ooops!!!!");
-					return String.Empty;
-				}
-
-				m_strXPath = m_strXPath.Substring(0, iPos);
-				return m_strXPath;
 			}
 		}
 	}

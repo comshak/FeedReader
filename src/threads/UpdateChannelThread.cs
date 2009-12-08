@@ -88,12 +88,12 @@ namespace com.comshak.FeedReader
 		private void OnBegin()
 		{
 			m_form.OnBegin_UpdateChannel(m_feedNode);
-		}	
+		}
 
 		private void OnEnd()
 		{
 			m_form.OnEnd_UpdateChannel(m_feedNode);
-		}	
+		}
 
 		/// <summary>
 		/// The thread procedure.
@@ -121,10 +121,68 @@ namespace com.comshak.FeedReader
 			m_strTempFeedFile = strTempFeedFile;
 		}
 
+		/// <summary>
+		/// Opens the cached feed file to read the last updated date.
+		/// </summary>
+		/// <param name="rssFilename"></param>
+		/// <returns>The DateTime when it was last updated, or DateTime.MinValue if never updated.</returns>
+		public DateTime GetLastUpdate(string rssFilename)
+		{
+			DateTime dtLastUpdate = DateTime.MinValue;	// Never
+
+			if (!System.IO.File.Exists(rssFilename))
+			{
+				return dtLastUpdate;
+			}
+
+			XmlTextReader xmlReader = null;
+			try
+			{
+				string strElementName;
+				XPath xPath = new XPath();
+
+				xmlReader = new XmlTextReader(rssFilename);
+				while (xmlReader.Read())
+				{
+					XmlNodeType type = xmlReader.NodeType;
+					if (type == XmlNodeType.Element)
+					{
+						strElementName = xmlReader.Name;
+						if (!xmlReader.IsEmptyElement && xPath.AddElement(strElementName) == "/rss/channel")
+						{
+							if (strElementName == "comshak:lastUpdate")
+							{
+								if (!xmlReader.Read() || (xmlReader.NodeType != XmlNodeType.Text))
+								{
+									continue;
+								}
+								dtLastUpdate = DateTime.Parse(xmlReader.Value);
+								break;
+							}
+						}
+					}
+					else if (type == XmlNodeType.EndElement)
+					{
+						strElementName = xmlReader.Name;
+						xPath.RemoveElement(strElementName);
+					}
+				}
+			}
+			finally
+			{
+				if (xmlReader != null)
+				{
+					xmlReader.Close();
+				}
+			}
+			return dtLastUpdate;
+		}
+
 		public void UpdateChannel(string strXmlUrl)
 		{
 			try
 			{
+				DateTime dtLastUpdate = DateTime.MinValue;
 				string strFileName = Names.FeedsFolder + m_feedNode.FileName;
 
 				XmlDocument xmlResponse = null;
@@ -132,22 +190,25 @@ namespace com.comshak.FeedReader
 				{
 					if (System.IO.File.Exists(m_strTempFeedFile))
 					{
+						dtLastUpdate = DateTime.Now;
 						xmlResponse = new XmlDocument();
 						xmlResponse.Load(m_strTempFeedFile);
 					}
 				}
 				else
 				{
+					dtLastUpdate = GetLastUpdate(strFileName);
 #if DEBUG
-					xmlResponse = Utils.DownloadXml(strXmlUrl, strFileName + ".xml");
+					xmlResponse = Utils.DownloadXml(strXmlUrl, strFileName + ".xml", ref dtLastUpdate);
 #else
-					xmlResponse = Utils.DownloadXml(strXmlUrl, null);
+					xmlResponse = Utils.DownloadXml(strXmlUrl, null, ref dtLastUpdate);
 #endif
 				}
 
 				if (xmlResponse != null)
 				{
 					FeedManager = new FeedManager(xmlResponse.NameTable);
+					FeedManager.LastUpdated = dtLastUpdate;
 					m_feedFormat = FeedManager.TransferNamespaces(xmlResponse);
 					Debug.WriteLine("The feed is " + m_feedFormat);
 
@@ -188,6 +249,7 @@ namespace com.comshak.FeedReader
 					rssChannel.Title = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/rss/channel/title");
 					rssChannel.Link = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/rss/channel/link");
 					rssChannel.Description = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/rss/channel/description");
+					rssChannel.LastUpdated = FeedManager.LastUpdated;
 
 					WriteRssItems(xmlUpdate, rssChannel);
 				}
@@ -198,6 +260,7 @@ namespace com.comshak.FeedReader
 					rssChannel.Title = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/atom:feed/atom:title");
 					rssChannel.Link = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/atom:feed/atom:link[@rel=\"alternate\" and @type=\"text/html\"]/@href");
 					rssChannel.Description = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/atom:feed/atom:subtitle");
+					rssChannel.LastUpdated = FeedManager.LastUpdated;
 
 					WriteAtomItems(xmlUpdate, rssChannel);
 				}
@@ -207,6 +270,7 @@ namespace com.comshak.FeedReader
 
 					rssChannel.Title = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/rdf:RDF/rss:channel/rss:title");
 					rssChannel.Link = FeedManager.GetNodeContent(xmlUpdate.DocumentElement, "/rdf:RDF/rss:channel/rss:link");
+					rssChannel.LastUpdated = FeedManager.LastUpdated;
 
 					WriteRdfItems(xmlUpdate, rssChannel);
 				}
