@@ -107,6 +107,8 @@
   <ItemGroup>
     <EmbeddedResource Include="AppStrings.resx">
       <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="BrowserBar.resx">
       <DependentUpon>BrowserBar.cs</DependentUpon>
@@ -146,6 +148,11 @@
     <None Include="AppStrings.xsx">
       <DependentUpon>AppStrings.xsd</DependentUpon>
     </None>
+    <Compile Include="AppStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppStrings.resx</DependentUpon>
+    </Compile>
     <Compile Include="BrowserBar.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -21,13 +21,13 @@ namespace com.comshak.FeedReader
 	/// </summary>
 	public class FeedReaderForm : System.Windows.Forms.Form
 	{
-		private System.Windows.Forms.MainMenu mainMenu1;
+		private System.Windows.Forms.MainMenu mainMenu;
 		private System.Windows.Forms.StatusBar statusBarMain;
 		private System.Windows.Forms.MenuItem menuItem1;
 		private System.Windows.Forms.TreeView treeViewFeeds;
 		private System.Windows.Forms.ListView listViewHeadlines;
 		private AxSHDocVw.AxWebBrowser axWebBrowser;
-		private System.Windows.Forms.ContextMenu contextMenu1;
+		private System.Windows.Forms.ContextMenu contextMenu;
 		private System.Windows.Forms.MenuItem menuItemUpdate;
 		private IContainer components;
 
@@ -61,6 +61,8 @@ namespace com.comshak.FeedReader
 		private ColumnHeader colHdrCategory;
 		private MenuItem menuItemGC;
 		private ColumnHeader colHdrIcon;
+		private ToolStrip toolbar;
+		private ToolStripButton tsbNewFeed;
 		private com.comshak.FeedReader.FeedNode		m_dragNode;		// Node being dragged
 		#endregion
 
@@ -104,8 +106,6 @@ namespace com.comshak.FeedReader
 			colHdrReceived.Width = 130;
 			colHdrAuthor.Width = 100;
 			colHdrCategory.Width = 80;
-
-			RepositionBrowser();
 		}
 
 		/// <summary>
@@ -132,7 +132,7 @@ namespace com.comshak.FeedReader
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FeedReaderForm));
-			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
+			this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
 			this.menuItemSave = new System.Windows.Forms.MenuItem();
 			this.menuItemFileSep1 = new System.Windows.Forms.MenuItem();
@@ -144,7 +144,7 @@ namespace com.comshak.FeedReader
 			this.pnlStatus = new System.Windows.Forms.StatusBarPanel();
 			this.pnlProgress = new System.Windows.Forms.StatusBarPanel();
 			this.treeViewFeeds = new System.Windows.Forms.TreeView();
-			this.contextMenu1 = new System.Windows.Forms.ContextMenu();
+			this.contextMenu = new System.Windows.Forms.ContextMenu();
 			this.menuItemUpdate = new System.Windows.Forms.MenuItem();
 			this.menuItemSep1 = new System.Windows.Forms.MenuItem();
 			this.menuItemImport = new System.Windows.Forms.MenuItem();
@@ -163,15 +163,18 @@ namespace com.comshak.FeedReader
 			this.colHdrCategory = new System.Windows.Forms.ColumnHeader();
 			this.splitterH = new System.Windows.Forms.Splitter();
 			this.axWebBrowser = new AxInterop.SHDocVw.AxWebBrowser();
+			this.toolbar = new System.Windows.Forms.ToolStrip();
+			this.tsbNewFeed = new System.Windows.Forms.ToolStripButton();
 			this.browserHeader1 = new com.comshak.FeedReader.BrowserHeader();
 			((System.ComponentModel.ISupportInitialize)(this.pnlStatus)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pnlProgress)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.axWebBrowser)).BeginInit();
+			this.toolbar.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// mainMenu1
+			// mainMenu
 			// 
-			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem1,
             this.menuItemHelp});
 			// 
@@ -223,7 +226,7 @@ namespace com.comshak.FeedReader
 			// 
 			// statusBarMain
 			// 
-			this.statusBarMain.Location = new System.Drawing.Point(0, 318);
+			this.statusBarMain.Location = new System.Drawing.Point(0, 226);
 			this.statusBarMain.Name = "statusBarMain";
 			this.statusBarMain.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
             this.pnlStatus,
@@ -246,12 +249,12 @@ namespace com.comshak.FeedReader
 			// treeViewFeeds
 			// 
 			this.treeViewFeeds.AllowDrop = true;
-			this.treeViewFeeds.ContextMenu = this.contextMenu1;
+			this.treeViewFeeds.ContextMenu = this.contextMenu;
 			this.treeViewFeeds.Dock = System.Windows.Forms.DockStyle.Left;
 			this.treeViewFeeds.HideSelection = false;
-			this.treeViewFeeds.Location = new System.Drawing.Point(0, 0);
+			this.treeViewFeeds.Location = new System.Drawing.Point(0, 25);
 			this.treeViewFeeds.Name = "treeViewFeeds";
-			this.treeViewFeeds.Size = new System.Drawing.Size(128, 318);
+			this.treeViewFeeds.Size = new System.Drawing.Size(128, 201);
 			this.treeViewFeeds.TabIndex = 1;
 			this.treeViewFeeds.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeViewFeeds_DragDrop);
 			this.treeViewFeeds.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewFeeds_AfterSelect);
@@ -260,9 +263,9 @@ namespace com.comshak.FeedReader
 			this.treeViewFeeds.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.treeViewFeeds_ItemDrag);
 			this.treeViewFeeds.DragOver += new System.Windows.Forms.DragEventHandler(this.treeViewFeeds_DragOver);
 			// 
-			// contextMenu1
+			// contextMenu
 			// 
-			this.contextMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.contextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemUpdate,
             this.menuItemSep1,
             this.menuItemImport,
@@ -320,12 +323,11 @@ namespace com.comshak.FeedReader
 			// splitterV
 			// 
 			this.splitterV.BackColor = System.Drawing.SystemColors.Control;
-			this.splitterV.Location = new System.Drawing.Point(128, 0);
+			this.splitterV.Location = new System.Drawing.Point(128, 25);
 			this.splitterV.Name = "splitterV";
-			this.splitterV.Size = new System.Drawing.Size(3, 318);
+			this.splitterV.Size = new System.Drawing.Size(3, 201);
 			this.splitterV.TabIndex = 2;
 			this.splitterV.TabStop = false;
-			this.splitterV.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitterV_SplitterMoved);
 			// 
 			// listViewHeadlines
 			// 
@@ -339,7 +341,7 @@ namespace com.comshak.FeedReader
 			this.listViewHeadlines.Dock = System.Windows.Forms.DockStyle.Top;
 			this.listViewHeadlines.FullRowSelect = true;
 			this.listViewHeadlines.HideSelection = false;
-			this.listViewHeadlines.Location = new System.Drawing.Point(131, 0);
+			this.listViewHeadlines.Location = new System.Drawing.Point(131, 25);
 			this.listViewHeadlines.MultiSelect = false;
 			this.listViewHeadlines.Name = "listViewHeadlines";
 			this.listViewHeadlines.Size = new System.Drawing.Size(628, 152);
@@ -384,19 +386,19 @@ namespace com.comshak.FeedReader
 			// 
 			this.splitterH.BackColor = System.Drawing.SystemColors.Control;
 			this.splitterH.Dock = System.Windows.Forms.DockStyle.Top;
-			this.splitterH.Location = new System.Drawing.Point(131, 152);
+			this.splitterH.Location = new System.Drawing.Point(131, 177);
 			this.splitterH.Name = "splitterH";
 			this.splitterH.Size = new System.Drawing.Size(628, 3);
 			this.splitterH.TabIndex = 4;
 			this.splitterH.TabStop = false;
-			this.splitterH.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitterH_SplitterMoved);
 			// 
 			// axWebBrowser
 			// 
+			this.axWebBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.axWebBrowser.Enabled = true;
-			this.axWebBrowser.Location = new System.Drawing.Point(137, 192);
+			this.axWebBrowser.Location = new System.Drawing.Point(131, 211);
 			this.axWebBrowser.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWebBrowser.OcxState")));
-			this.axWebBrowser.Size = new System.Drawing.Size(597, 144);
+			this.axWebBrowser.Size = new System.Drawing.Size(628, 15);
 			this.axWebBrowser.TabIndex = 5;
 			this.axWebBrowser.BeforeNavigate2 += new AxInterop.SHDocVw.DWebBrowserEvents2_BeforeNavigate2EventHandler(this.axWebBrowser_BeforeNavigate2);
 			this.axWebBrowser.StatusTextChange += new AxInterop.SHDocVw.DWebBrowserEvents2_StatusTextChangeEventHandler(this.axWebBrowser_StatusTextChange);
@@ -405,11 +407,29 @@ namespace com.comshak.FeedReader
 			this.axWebBrowser.NavigateComplete2 += new AxInterop.SHDocVw.DWebBrowserEvents2_NavigateComplete2EventHandler(this.axWebBrowser_NavigateComplete2);
 			this.axWebBrowser.DocumentComplete += new AxInterop.SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(this.axWebBrowser_DocumentComplete);
 			// 
+			// toolbar
+			// 
+			this.toolbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsbNewFeed});
+			this.toolbar.Location = new System.Drawing.Point(0, 0);
+			this.toolbar.Name = "toolbar";
+			this.toolbar.Size = new System.Drawing.Size(759, 25);
+			this.toolbar.TabIndex = 7;
+			// 
+			// tsbNewFeed
+			// 
+			this.tsbNewFeed.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.tsbNewFeed.Image = ((System.Drawing.Image)(resources.GetObject("tsbNewFeed.Image")));
+			this.tsbNewFeed.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.tsbNewFeed.Name = "tsbNewFeed";
+			this.tsbNewFeed.Size = new System.Drawing.Size(23, 22);
+			this.tsbNewFeed.Text = "New feed";
+			// 
 			// browserHeader1
 			// 
 			this.browserHeader1.Address = "";
 			this.browserHeader1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.browserHeader1.Location = new System.Drawing.Point(131, 155);
+			this.browserHeader1.Location = new System.Drawing.Point(131, 180);
 			this.browserHeader1.Name = "browserHeader1";
 			this.browserHeader1.Size = new System.Drawing.Size(628, 31);
 			this.browserHeader1.TabIndex = 6;
@@ -420,25 +440,28 @@ namespace com.comshak.FeedReader
 			// FeedReaderForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(759, 340);
-			this.Controls.Add(this.browserHeader1);
+			this.ClientSize = new System.Drawing.Size(759, 248);
 			this.Controls.Add(this.axWebBrowser);
+			this.Controls.Add(this.browserHeader1);
 			this.Controls.Add(this.splitterH);
 			this.Controls.Add(this.listViewHeadlines);
 			this.Controls.Add(this.splitterV);
 			this.Controls.Add(this.treeViewFeeds);
+			this.Controls.Add(this.toolbar);
 			this.Controls.Add(this.statusBarMain);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Menu = this.mainMenu1;
+			this.Menu = this.mainMenu;
 			this.Name = "FeedReaderForm";
 			this.Text = "FeedReader";
 			this.Load += new System.EventHandler(this.FeedReaderForm_Load);
 			this.Closed += new System.EventHandler(this.FeedReaderForm_Closed);
-			this.Resize += new System.EventHandler(this.FeedReaderForm_Resize);
 			((System.ComponentModel.ISupportInitialize)(this.pnlStatus)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pnlProgress)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.axWebBrowser)).EndInit();
+			this.toolbar.ResumeLayout(false);
+			this.toolbar.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 		#endregion
@@ -1139,34 +1162,6 @@ namespace com.comshak.FeedReader
 		private void menuItemGC_Click(object sender, EventArgs e)
 		{
 			GC.Collect();
-		}
-
-		/// <summary>
-		/// Repositions the WebBrowser control to fit between the V Splitter on the left,
-		/// the dialog border on the right, the bottom of the browserHearder on the top,
-		/// and the top of the status bar on the bottom.
-		/// </summary>
-		private void RepositionBrowser()
-		{
-			axWebBrowser.Left = browserHeader1.Left;
-			axWebBrowser.Top = browserHeader1.Bottom + 1;
-			axWebBrowser.Width = browserHeader1.Width;
-			axWebBrowser.Height = statusBarMain.Top - axWebBrowser.Top;
-		}
-
-		private void FeedReaderForm_Resize(object sender, System.EventArgs e)
-		{
-			RepositionBrowser();
-		}
-
-		private void splitterH_SplitterMoved(object sender, System.Windows.Forms.SplitterEventArgs e)
-		{
-			RepositionBrowser();
-		}
-
-		private void splitterV_SplitterMoved(object sender, System.Windows.Forms.SplitterEventArgs e)
-		{
-			RepositionBrowser();
 		}
 
 		private void browserHeader1_GoButtonPressed(object sender, System.EventArgs e)

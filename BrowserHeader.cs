@@ -83,13 +83,12 @@ namespace com.comshak.FeedReader
 			// 
 			// txtAddress
 			// 
-			this.txtAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.txtAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.txtAddress.Location = new System.Drawing.Point(51, 10);
 			this.txtAddress.Name = "txtAddress";
 			this.txtAddress.Size = new System.Drawing.Size(582, 20);
 			this.txtAddress.TabIndex = 1;
-			this.txtAddress.Text = "";
 			this.txtAddress.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAddress_KeyDown);
 			// 
 			// btnGo
@@ -123,13 +122,13 @@ namespace com.comshak.FeedReader
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox1.Controls.Add(this.btnBack);
 			this.groupBox1.Controls.Add(this.txtAddress);
 			this.groupBox1.Controls.Add(this.btnForw);
 			this.groupBox1.Controls.Add(this.btnGo);
-			this.groupBox1.Location = new System.Drawing.Point(0, -5);
+			this.groupBox1.Location = new System.Drawing.Point(0, -4);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(672, 34);
 			this.groupBox1.TabIndex = 5;
@@ -141,6 +140,7 @@ namespace com.comshak.FeedReader
 			this.Name = "BrowserHeader";
 			this.Size = new System.Drawing.Size(672, 31);
 			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
