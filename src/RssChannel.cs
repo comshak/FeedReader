@@ -222,6 +222,8 @@ namespace com.comshak.FeedReader
 						}
 					}
 				}
+				xmlReader.Close();
+				xmlReader = null;
 				Write();
 			}
 			catch (Exception ex)
