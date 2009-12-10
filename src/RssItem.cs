@@ -148,47 +148,84 @@ namespace com.comshak.FeedReader
 			xmlWriter.WriteEndElement();
 		}
 
+		/// <summary>
+		/// Merges a non-empty element.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
 		public void MergeElement(string name, string value)
 		{
 			if (name == "title")
 			{
 				m_strTitle = value;
-				Debug.WriteLine("Found Title: " + value);
+				Debug.WriteLine("\tFound Title: " + value);
 			}
 			else if (name == "link")
 			{
 				m_strLink = value;
-				Debug.WriteLine("Found Link: " + value);
+				Debug.WriteLine("\tFound Link: " + value);
 			}
 			else if (name == "pubDate")
 			{
 				Published = value;
-				Debug.WriteLine("Found Published: " + value);
+				Debug.WriteLine("\tFound Published: " + value);
 			}
 			else if (name == "comshak:rcvDate")
 			{
 				DateTime dtRcv = DateTimeExt.Parse(value);
 				m_dtReceived = dtRcv;
-				Debug.WriteLine("Found ReceivedDate: " + value + " ==> " + dtRcv.ToString());
+				Debug.WriteLine("\tFound ReceivedDate: " + value + " ==> " + dtRcv);
 			}
 			else if (name == "author")
 			{
 				m_strAuthor = value;
-				Debug.WriteLine("Found Author: " + value);
+				Debug.WriteLine("\tFound Author: " + value);
 			}
 			else if (name == "description")
 			{
 				m_strDescription = value;
-				Debug.WriteLine("Found Description: " + value);
+				Debug.WriteLine("\tFound Description: " + value);
 			}
 			else if (name == "category")
 			{
 				m_strCategory = value;
-				Debug.WriteLine("Found Category: " + value);
+				Debug.WriteLine("\tFound Category: " + value);
 			}
 			else
 			{
-				Debug.WriteLine("Found Unknown " + name + ": " + value);
+				Debug.WriteLine("\tFound Unknown " + name + ": " + value);
+			}
+		}
+
+		/// <summary>
+		/// Merges the "enclosure" element, which is empty but has attributes.
+		/// </summary>
+		/// <param name="xmlReader"></param>
+		public void MergeEnclosure(XmlReader xmlReader)
+		{
+			if (xmlReader.HasAttributes)
+			{
+				m_Enclosure = new Enclosure();
+				xmlReader.MoveToFirstAttribute();
+				do
+				{
+					switch (xmlReader.Name)
+					{
+						case "url":
+							m_Enclosure.Url = xmlReader.Value;
+							break;
+						case "length":
+							m_Enclosure.Size = xmlReader.Value;
+							break;
+						case "type":
+							m_Enclosure.Type = xmlReader.Value;
+							break;
+					}
+				}
+				while (xmlReader.MoveToNextAttribute());
+				xmlReader.MoveToElement();
+
+				Debug.WriteLine("\tFound Enclosure: " + m_Enclosure.Url);
 			}
 		}
 	}

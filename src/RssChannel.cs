@@ -198,7 +198,14 @@ namespace com.comshak.FeedReader
 					if (type == XmlNodeType.Element)
 					{
 						strElementName = xmlReader.Name;
-						if (!xmlReader.IsEmptyElement && xPath.AddElement(strElementName) == "/rss/channel/item")
+						if (xmlReader.IsEmptyElement)	// Check this first!
+						{
+							if (strElementName == "enclosure")
+							{
+								rssItem.MergeEnclosure(xmlReader);
+							}
+						}
+						else if (xPath.AddElement(strElementName) == "/rss/channel/item")
 						{
 							if (!xmlReader.Read() || (xmlReader.NodeType != XmlNodeType.Text))
 							{
