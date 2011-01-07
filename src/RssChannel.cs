@@ -32,50 +32,54 @@ namespace com.comshak.FeedReader
 			m_arrItems.Add(item);
 		}
 
-		public RssItem ExistingItem(RssItem newItem)
+		/// <summary>
+		/// Adds an RssItem to this channel's collection if it doesn't already exist in the channel.
+		/// </summary>
+		/// <param name="item">RssItem from the local rss channel.</param>
+		public void AddIfNew(RssItem item)
 		{
-			RssItem existing = null;
-			if (newItem == null)
-			{
-				return existing;
-			}
-			IEnumerator enumItems = m_arrItems.GetEnumerator();
-			while (enumItems.MoveNext())
-			{
-				RssItem item = (RssItem) enumItems.Current;
-				if (item != null)
-				{
-					if ((item.PublishedDate == newItem.PublishedDate) && (item.Title == newItem.Title))
-					{
-						existing = item;
-						break;
-					}
-				}
-			}
-			return existing;
-		}
-
-		public void AddIfNew(RssItem newItem)
-		{
-			if (newItem == null)
-			{
-				return;
-			}
-			RssItem existing = ExistingItem(newItem);
+			RssItem existing = FindExistingItem(item);
 			bool bExisting = (existing != null);
 			if (!bExisting)
 			{
-				m_arrItems.Add(newItem);
+				m_arrItems.Add(item);
 			}
 			else
 			{
-				string strMsg = String.Format("existing.ReceivedDate = {0}; newItem.ReceivedDate = {1}", existing.ReceivedDate, newItem.ReceivedDate);
-				Debug.WriteLine(strMsg);
+				Utils.DbgOut("existing.ReceivedDate = {0}; newItem.ReceivedDate = {1}", existing.ReceivedDate, item.ReceivedDate);
 
-				existing.ReceivedDate = newItem.ReceivedDate;
+				if (item.NeedsRetain)
+				{
+					existing.CopyFrom(item);
+				}
+				else
+				{
+					existing.ReceivedDate = item.ReceivedDate;
+				}
 			}
-			string strPrefix = (bExisting) ? String.Empty : " NOT";
-			Debug.WriteLine(newItem.Title + " (" + newItem.PublishedDate + ") was" + strPrefix + " already found in the channel.");
+			Utils.DbgOut("{0} (published {1}) was {2} already found in the channel.", item.Title, item.PublishedDate, (bExisting) ? String.Empty : "NOT");
+		}
+
+		/// <summary>
+		/// Searches this channel's items for a similar item.
+		/// </summary>
+		/// <param name="item">An RssItem that might already exist in the channel.</param>
+		/// <returns>The existing RssItem if found, null otherwise.</returns>
+		public RssItem FindExistingItem(RssItem item)
+		{
+			if (item != null)
+			{
+				IEnumerator enumItems = m_arrItems.GetEnumerator();
+				while (enumItems.MoveNext())
+				{
+					RssItem currentItem = enumItems.Current as RssItem;
+					if (currentItem != null && currentItem.Equals(item))
+					{
+						return currentItem;
+					}
+				}
+			}
+			return null;
 		}
 
 		#region Public Properties
@@ -133,30 +137,16 @@ namespace com.comshak.FeedReader
 
 				xmlWriter.WriteStartElement("channel");
 
-				xmlWriter.WriteStartElement("title");
-				xmlWriter.WriteString(m_strTitle);
-				xmlWriter.WriteEndElement();
-
-				xmlWriter.WriteStartElement("link");
-				xmlWriter.WriteString(m_strLink);
-				xmlWriter.WriteEndElement();
-
-				xmlWriter.WriteStartElement("description");
-				xmlWriter.WriteString(m_strDescription);
-				xmlWriter.WriteEndElement();
-
-				xmlWriter.WriteStartElement("generator");
-				xmlWriter.WriteString(m_strGenerator);
-				xmlWriter.WriteEndElement();
-
-				xmlWriter.WriteStartElement("comshak:lastUpdate");
-				xmlWriter.WriteString(m_dtLastUpdated.ToString());
-				xmlWriter.WriteEndElement();
+				Utils.WriteStringElement(xmlWriter, "title", m_strTitle);
+				Utils.WriteStringElement(xmlWriter, "link", m_strLink);
+				Utils.WriteStringElement(xmlWriter, "description", m_strDescription);
+				Utils.WriteStringElement(xmlWriter, "generator", m_strGenerator);
+				Utils.WriteStringElement(xmlWriter, "comshak:lastUpdate", m_dtLastUpdated.ToString());
 
 				IEnumerator enumItems = GetEnumerator();
 				while (enumItems.MoveNext())
 				{// Write all children
-					RssItem item = (RssItem) enumItems.Current;
+					RssItem item = enumItems.Current as RssItem;
 					if (item != null)
 					{
 						item.Write(xmlWriter);
@@ -189,7 +179,7 @@ namespace com.comshak.FeedReader
 
 				string strElementName;
 				XPath xPath = new XPath();
-				RssItem rssItem = null;
+				RssItem localItem = null;
 
 				xmlReader = new XmlTextReader(m_strFileName);
 				while (xmlReader.Read())
@@ -202,30 +192,35 @@ namespace com.comshak.FeedReader
 						{
 							if (strElementName == "enclosure")
 							{
-								rssItem.MergeEnclosure(xmlReader);
+								localItem.ReadEnclosure(xmlReader);
 							}
 						}
 						else if (xPath.AddElement(strElementName) == "/rss/channel/item")
 						{
-							if (!xmlReader.Read() || (xmlReader.NodeType != XmlNodeType.Text))
+							if (!xmlReader.Read())
 							{
 								continue;
 							}
-							if (rssItem == null)
+							XmlNodeType nt = xmlReader.NodeType;
+							if ((nt != XmlNodeType.Text) && (nt != XmlNodeType.CDATA))
 							{
-								rssItem = new RssItem();
+								continue;
 							}
-							rssItem.MergeElement(strElementName, xmlReader.Value);
+							if (localItem == null)
+							{
+								localItem = new RssItem();
+							}
+							localItem.ReadElement(strElementName, xmlReader.Value, nt);
 						}
 					}
 					else if (type == XmlNodeType.EndElement)
 					{
 						strElementName = xmlReader.Name;
 						xPath.RemoveElement(strElementName);
-						if ((strElementName == "item") && xPath.Equals("/rss/channel") && (rssItem != null))
+						if ((strElementName == "item") && xPath.Equals("/rss/channel") && (localItem != null))
 						{
-							AddIfNew(rssItem);
-							rssItem = null;
+							AddIfNew(localItem);
+							localItem = null;
 						}
 					}
 				}

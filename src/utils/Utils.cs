@@ -83,8 +83,8 @@ namespace com.comshak.FeedReader
 				response = (HttpWebResponse)request.GetResponse();
 				if (response.StatusCode != HttpStatusCode.OK)
 				{
-					Debug.WriteLine("    Response StatusCode is \"" + response.StatusCode.ToString() +
-						"\" and StatusDescription is: " + response.StatusDescription);
+					Debug.WriteLine("    Response StatusCode: " + response.StatusCode);
+					Debug.WriteLine("    Response StatusDescription: " + response.StatusDescription);
 					return null;
 				}
 
@@ -92,10 +92,10 @@ namespace com.comshak.FeedReader
 
 				string contentEncoding = response.ContentEncoding.ToLower();
 
-				Debug.WriteLine("    Content type is " + response.ContentType);
-				Debug.WriteLine("    Content length is " + response.ContentLength);
-				Debug.WriteLine("    Content encoding is " + contentEncoding);
-				Debug.WriteLine("    Transfer encoding is " + response.Headers["Transfer-Encoding"]);
+				Debug.WriteLine("    Content-Type: " + response.ContentType);
+				Debug.WriteLine("    Content-Length: " + response.ContentLength);
+				Debug.WriteLine("    Content-Encoding: " + contentEncoding);
+				Debug.WriteLine("    Transfer-Encoding: " + response.Headers["Transfer-Encoding"]);
 
 				// Get the stream associated with the response.
 				Stream responseStream = response.GetResponseStream();
@@ -157,6 +157,11 @@ namespace com.comshak.FeedReader
 			return xmlResponse;
 		}
 
+		public static void DbgOut(string format, params object[] args)
+		{
+			Debug.WriteLine(String.Format(null, format, args));
+		}
+
 		/// <summary>
 		/// Outputs the specified exception to the debug output.
 		/// </summary>
@@ -185,6 +190,14 @@ namespace com.comshak.FeedReader
 			}
 			return false;
 		}
+
+		public static void WriteStringElement(XmlTextWriter xmlWriter, string element, string text)
+		{
+			xmlWriter.WriteStartElement(element);
+			xmlWriter.WriteString(text);
+			xmlWriter.WriteEndElement();
+		}
+
 
 		/// <summary>
 		/// Deletes a file, if it exists.

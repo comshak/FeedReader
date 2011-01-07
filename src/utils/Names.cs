@@ -6,6 +6,7 @@ namespace com.comshak.FeedReader
 	{
 		public const string FeedsFolder = @"feeds\";
 		public const string TempFolder = @"temp\";
+		public const string MediaFolder = @"media\";
 
 		private Names()
 		{

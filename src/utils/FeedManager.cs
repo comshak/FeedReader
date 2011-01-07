@@ -21,7 +21,8 @@ namespace com.comshak.FeedReader
 	public enum NCType		// Node Content Type
 	{
 		Xml = 0,
-		Text = 1
+		Text = 1,
+		CDATA = 2
 	}
 
 	public struct NodeContent
@@ -50,7 +51,23 @@ namespace com.comshak.FeedReader
 		public string Url;
 		public string Size;
 		public string Type;
-		public string File;
+		private string m_strFile;
+
+		public string File
+		{
+			get
+			{
+				if (String.IsNullOrEmpty(m_strFile) && !String.IsNullOrEmpty(Url))
+				{
+					int iSlash = Url.LastIndexOf('/');
+					if (iSlash > -1)
+					{
+						m_strFile = Names.MediaFolder + Url.Substring(iSlash + 1);
+					}
+				}
+				return m_strFile;
+			}
+		}
 
 		public bool Empty
 		{
@@ -284,7 +301,7 @@ namespace com.comshak.FeedReader
 						}
 						iCrt++;
 					}
-					while ((iCrt < iMax) && ((strReturn == null) || (strReturn.Length < 1)));
+					while ((iCrt < iMax) && String.IsNullOrEmpty(strReturn));
 				}
 			}
 			catch (Exception ex)

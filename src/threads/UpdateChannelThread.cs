@@ -20,6 +20,7 @@ namespace com.comshak.FeedReader
 			new NodeContent("atom:content[@type=\"text/html\" and @mode=\"escaped\"]", NCEncoding.String, NCType.Xml),
 			new NodeContent("atom:content[@type=\"text/html\"]",                       NCEncoding.String, NCType.Xml),
 			new NodeContent("atom:content[@type=\"html\"]",                            NCEncoding.Raw,    NCType.Xml),
+			new NodeContent("atom:content[@type=\"xhtml\"]",                           NCEncoding.String, NCType.Xml),
 			new NodeContent("atom:summary[@type=\"application/xhtml+xml\"]",           NCEncoding.String, NCType.Xml),
 			new NodeContent("atom:summary[@type=\"text/html\"]",                       NCEncoding.String, NCType.Xml),
 			new NodeContent("atom:summary[@type=\"html\"]",                            NCEncoding.Raw,    NCType.Xml)
@@ -349,7 +350,7 @@ namespace com.comshak.FeedReader
 				rssItem.Link = FeedManager.GetNodeContent(xmlNode, "rss:link");
 				rssItem.Published = FeedManager.GetNodeContent(xmlNode, "dc:date");
 				rssItem.ReceivedDate = now;
-				//rssItem.Author = GetNodeText(xmlNode, "???");
+				//localItem.Author = GetNodeText(xmlNode, "???");
 				rssItem.Description = FeedManager.GetNodeContent(xmlNode, "rss:description");
 				rssChannel.AddItem(rssItem);
 			}

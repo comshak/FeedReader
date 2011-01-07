@@ -84,9 +84,9 @@ namespace com.comshak.FeedReader
 			m_rootFeedNode = new FeedNode("Feeds", null, null, true);
 			m_imgList = new ImageList();
 			Assembly a = Assembly.GetExecutingAssembly();
-			m_imgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.folder.ico")));	// 0
-			m_imgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.feed.ico")));		// 1
-			m_imgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.sync.ico")));		// 2
+			m_imgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.folder.ico")));		// 0
+			m_imgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.feed.ico")));			// 1
+			m_imgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.sync.ico")));			// 2
 			treeViewFeeds.ImageList = m_imgList;
 
 			AssemblyName an = a.GetName();
@@ -94,9 +94,10 @@ namespace com.comshak.FeedReader
 
 			this.Size = new Size(1024, 768);
 			ImageList lvImgList = new ImageList();
-			lvImgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.text.ico")));		// 0
-			lvImgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.download.ico")));	// 1
-			lvImgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.play.ico")));		// 2
+			lvImgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.text.ico")));			// 0
+			lvImgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.download.ico")));		// 1
+			lvImgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.play.ico")));			// 2
+			lvImgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.hourglass.ico")));	// 3
 			listViewHeadlines.SmallImageList = lvImgList;
 			listViewHeadlines.Height = (this.ClientSize.Height - statusBarMain.Height) / 2;
 			treeViewFeeds.Width = 250;
@@ -226,7 +227,7 @@ namespace com.comshak.FeedReader
 			// 
 			// statusBarMain
 			// 
-			this.statusBarMain.Location = new System.Drawing.Point(0, 226);
+			this.statusBarMain.Location = new System.Drawing.Point(0, 184);
 			this.statusBarMain.Name = "statusBarMain";
 			this.statusBarMain.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
             this.pnlStatus,
@@ -240,7 +241,7 @@ namespace com.comshak.FeedReader
 			// 
 			this.pnlStatus.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
 			this.pnlStatus.Name = "pnlStatus";
-			this.pnlStatus.Width = 643;
+			this.pnlStatus.Width = 642;
 			// 
 			// pnlProgress
 			// 
@@ -254,12 +255,13 @@ namespace com.comshak.FeedReader
 			this.treeViewFeeds.HideSelection = false;
 			this.treeViewFeeds.Location = new System.Drawing.Point(0, 25);
 			this.treeViewFeeds.Name = "treeViewFeeds";
-			this.treeViewFeeds.Size = new System.Drawing.Size(128, 201);
+			this.treeViewFeeds.Size = new System.Drawing.Size(128, 159);
 			this.treeViewFeeds.TabIndex = 1;
 			this.treeViewFeeds.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeViewFeeds_DragDrop);
 			this.treeViewFeeds.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewFeeds_AfterSelect);
 			this.treeViewFeeds.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeViewFeeds_MouseDown);
 			this.treeViewFeeds.DragEnter += new System.Windows.Forms.DragEventHandler(this.treeViewFeeds_DragEnter);
+			this.treeViewFeeds.KeyUp += new System.Windows.Forms.KeyEventHandler(this.treeViewFeeds_KeyUp);
 			this.treeViewFeeds.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.treeViewFeeds_ItemDrag);
 			this.treeViewFeeds.DragOver += new System.Windows.Forms.DragEventHandler(this.treeViewFeeds_DragOver);
 			// 
@@ -325,7 +327,7 @@ namespace com.comshak.FeedReader
 			this.splitterV.BackColor = System.Drawing.SystemColors.Control;
 			this.splitterV.Location = new System.Drawing.Point(128, 25);
 			this.splitterV.Name = "splitterV";
-			this.splitterV.Size = new System.Drawing.Size(3, 201);
+			this.splitterV.Size = new System.Drawing.Size(3, 159);
 			this.splitterV.TabIndex = 2;
 			this.splitterV.TabStop = false;
 			// 
@@ -398,7 +400,7 @@ namespace com.comshak.FeedReader
 			this.axWebBrowser.Enabled = true;
 			this.axWebBrowser.Location = new System.Drawing.Point(131, 211);
 			this.axWebBrowser.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWebBrowser.OcxState")));
-			this.axWebBrowser.Size = new System.Drawing.Size(628, 15);
+			this.axWebBrowser.Size = new System.Drawing.Size(628, 0);
 			this.axWebBrowser.TabIndex = 5;
 			this.axWebBrowser.BeforeNavigate2 += new AxInterop.SHDocVw.DWebBrowserEvents2_BeforeNavigate2EventHandler(this.axWebBrowser_BeforeNavigate2);
 			this.axWebBrowser.StatusTextChange += new AxInterop.SHDocVw.DWebBrowserEvents2_StatusTextChangeEventHandler(this.axWebBrowser_StatusTextChange);
@@ -440,7 +442,7 @@ namespace com.comshak.FeedReader
 			// FeedReaderForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(759, 248);
+			this.ClientSize = new System.Drawing.Size(759, 206);
 			this.Controls.Add(this.axWebBrowser);
 			this.Controls.Add(this.browserHeader1);
 			this.Controls.Add(this.splitterH);
@@ -488,34 +490,6 @@ namespace com.comshak.FeedReader
 			}
 		}
 
-
-		/// <summary>
-		/// Occurs when the selection has been changed.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void treeViewFeeds_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
-		{
-			if (m_feedNodeRightClicked != null)
-			{
-				return;
-			}
-
-			TreeNode treeNode = e.Node;
-			FeedNode feedNode = (FeedNode)treeNode.Tag;
-			if (!feedNode.IsFolder)
-			{
-				m_feedNodeSelected = feedNode;
-				ReadChannelThread thread = new ReadChannelThread(this, feedNode);
-				thread.Start();
-			}
-			else
-			{
-				listViewHeadlines.Items.Clear();
-			}
-			NavigateTo("about:blank");
-		}
-
 		/// <summary>
 		/// Recursive method to update all the feeds within a folder and all its subfolders.
 		/// </summary>
@@ -542,6 +516,42 @@ namespace com.comshak.FeedReader
 		}
 
 		/// <summary>
+		/// Occurs when the selection has been changed.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void treeViewFeeds_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
+		{
+			if (m_feedNodeRightClicked != null)
+			{
+				return;
+			}
+
+			TreeNode treeNode = e.Node;
+
+			PopulateHeadlinesList(treeNode);
+		}
+
+		private void PopulateHeadlinesList(TreeNode treeNode)
+		{
+			if (treeNode != null)
+			{
+				FeedNode feedNode = (FeedNode)treeNode.Tag;
+				if (!feedNode.IsFolder)
+				{
+					m_feedNodeSelected = feedNode;
+					ReadChannelThread thread = new ReadChannelThread(this, feedNode);
+					thread.Start();
+				}
+				else
+				{
+					listViewHeadlines.Items.Clear();
+				}
+			}
+			NavigateTo("about:blank");
+		}
+
+		/// <summary>
 		/// Occurs when a mouse button is pressed.
 		/// 
 		/// Let's handle the right-click on TreeView items here...
@@ -558,25 +568,7 @@ namespace com.comshak.FeedReader
 					FeedNode feedNode = (FeedNode)treeNode.Tag;
 					if (feedNode != null)
 					{
-						if (feedNode.IsFolder)
-						{
-							menuItemUpdate.Text = "&Update group";
-							menuItemSep1.Visible = true;
-							menuItemImport.Visible = true;
-							menuItemNewFolder.Visible = true;
-							menuItemSep2.Visible = true;
-							menuItemDelete.Text = "&Delete folder";
-							menuItemDelete.Enabled = (feedNode.Parent != null);
-						}
-						else
-						{
-							menuItemUpdate.Text = "&Update channel";
-							menuItemSep1.Visible = false;
-							menuItemImport.Visible = false;
-							menuItemNewFolder.Visible = false;
-							menuItemSep2.Visible = true;
-							menuItemDelete.Text = "&Delete feed";
-						}
+						SetupContextMenu(feedNode);
 						m_feedNodeRightClicked = feedNode;
 					}
 				}
@@ -584,6 +576,60 @@ namespace com.comshak.FeedReader
 			else
 			{
 				m_feedNodeRightClicked = null;
+			}
+		}
+
+		/// <summary>
+		/// Occurs when a key is first pressed.
+		/// 
+		/// Needs to check for the pressing of the Apps key to display the context menu for the current node.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void treeViewFeeds_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Apps)
+			{
+				TreeNode treeNode = treeViewFeeds.SelectedNode;
+				if (treeNode != null)
+				{
+					FeedNode feedNode = (FeedNode)treeNode.Tag;
+					if (feedNode != null)
+					{
+						SetupContextMenu(feedNode);
+					}
+					m_feedNodeRightClicked = feedNode;
+
+					Point pt = new Point(treeNode.Bounds.Left, treeNode.Bounds.Bottom);
+					contextMenu.Show(treeViewFeeds, pt);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Sets up the treeview's context menu items for a specified node.
+		/// </summary>
+		/// <param name="feedNode"></param>
+		private void SetupContextMenu(FeedNode feedNode)
+		{
+			if (feedNode.IsFolder)
+			{
+				menuItemUpdate.Text = "&Update group";
+				menuItemSep1.Visible = true;
+				menuItemImport.Visible = true;
+				menuItemNewFolder.Visible = true;
+				menuItemSep2.Visible = true;
+				menuItemDelete.Text = "&Delete folder";
+				menuItemDelete.Enabled = (feedNode.Parent != null);
+			}
+			else
+			{
+				menuItemUpdate.Text = "&Update channel";
+				menuItemSep1.Visible = false;
+				menuItemImport.Visible = false;
+				menuItemNewFolder.Visible = false;
+				menuItemSep2.Visible = true;
+				menuItemDelete.Text = "&Delete feed";
 			}
 		}
 
@@ -645,6 +691,8 @@ namespace com.comshak.FeedReader
 
 					OnEnd_ParseFeeds();
 
+					SelectTreeNode(feedNode);
+
 					UpdateChannelThread thread = new UpdateChannelThread(this, feedNode);
 					thread.SetFromTempFile(form.TempFeedFile);
 					thread.Start();
@@ -652,6 +700,23 @@ namespace com.comshak.FeedReader
 			}
 		}
 
+		/// <summary>
+		/// Selects the TreeNode corresponding to the specified FeedNode.
+		/// </summary>
+		/// <param name="feedNode"></param>
+		private void SelectTreeNode(FeedNode feedNode)
+		{
+			// Now select the newly added node in the tree.
+			if (feedNode != null && feedNode.Tag != null)
+			{
+				treeViewFeeds.SelectedNode = feedNode.Tag;
+
+				// Now read the channel
+				m_feedNodeSelected = feedNode;
+				ReadChannelThread thread = new ReadChannelThread(this, feedNode);
+				thread.Start();
+			}
+		}
 
 		/// <summary>
 		/// Event handler for the context menu item "Delete".
@@ -677,12 +742,19 @@ namespace com.comshak.FeedReader
 					parent.DeleteChildNode(m_feedNodeRightClicked);
 					TreeNode tn = m_feedNodeRightClicked.Tag;
 					tn.Remove();
+
+					m_feedNodeSelected = null;
+					if (treeViewFeeds.SelectedNode != null)
+					{
+						m_feedNodeSelected = (FeedNode) treeViewFeeds.SelectedNode.Tag;
+					}
+
+					PopulateHeadlinesList(treeViewFeeds.SelectedNode);
 				}
 			}
 
 			m_feedNodeRightClicked = null;
 		}
-
 
 		/// <summary>
 		/// Event handler for the context menu item "New folder..."
@@ -693,7 +765,7 @@ namespace com.comshak.FeedReader
 		{
 			if (m_feedNodeRightClicked == null)
 			{
-				Debug.Assert(m_feedNodeRightClicked != null, "The right clicked node is not known!");
+				Debug.Assert(m_feedNodeRightClicked != null, "The right-clicked node is unknown!");
 				return;
 			}
 
@@ -811,6 +883,12 @@ namespace com.comshak.FeedReader
 			{
 				treeViewFeeds.EndUpdate();
 				treeViewFeeds.ExpandAll();
+
+				// Select the root node to bring it into view.
+				if (treeViewFeeds.Nodes.Count > 0)
+				{
+					treeViewFeeds.SelectedNode = treeViewFeeds.Nodes[0];
+				}
 			}
 		}
 
@@ -1144,6 +1222,7 @@ namespace com.comshak.FeedReader
 		private void FeedReaderForm_Closed(object sender, System.EventArgs e)
 		{
 			Debug.WriteLine("FeedReaderForm_Closed()");
+			DownloadThread.Stop();
 			WriteFeedsThread.QueueJob(m_rootFeedNode);
 			WriteFeedsThread.Stop();
 		}
@@ -1239,15 +1318,19 @@ namespace com.comshak.FeedReader
 					Headline headline = item.Tag as Headline;
 					if (headline != null)
 					{
-						if (headline.Enclosure.ListIcon == 1)
+						Enclosure enclosure = headline.Enclosure;
+						if (enclosure.ListIcon == 1)
 						{
-							// Download media
-							MessageBox.Show("Download media");
+							//DownloadThread.Add(enclosure.Url, enclosure.GetFile());
+							item.ImageIndex = 3;
 						}
-						else if (headline.Enclosure.ListIcon == 2)
+						else if (enclosure.ListIcon == 2)
 						{
-							// Play media
-							MessageBox.Show("Play media");
+							//string file = enclosure.GetFile();
+							//if (File.Exists(file))
+							//{
+							//	System.Diagnostics.Process.Start(file);
+							//}
 						}
 					}
 				}

@@ -49,6 +49,7 @@ namespace com.comshak.FeedReader
 			s_event = new ManualResetEvent(false);
 
 			s_thread = new Thread(new ThreadStart(Run));
+			s_thread.Name = "Write Feeds";
 			s_thread.Start();
 		}
 
