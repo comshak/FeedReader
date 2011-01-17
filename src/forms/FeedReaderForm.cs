@@ -473,6 +473,8 @@ namespace com.comshak.FeedReader
 			ParseFeedsThread thread = new ParseFeedsThread(this);
 			thread.Start();
 
+			axWebBrowser.Silent = true;		// Suppress script errors!
+
 			NavigateTo("about:blank");
 		}
 

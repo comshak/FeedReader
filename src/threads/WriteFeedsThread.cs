@@ -5,6 +5,7 @@ using System.Xml;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace com.comshak.FeedReader
 {
@@ -131,9 +132,14 @@ namespace com.comshak.FeedReader
 						FileInfo fi = new FileInfo("feeds.xml");
 						fi.MoveTo("feeds.xml.bak");
 					}
+					catch (FileNotFoundException fnfex)
+					{
+						Utils.DbgOutExc("WriteFeedsThread::Run()", fnfex);
+					}
 					catch (Exception ex)
 					{
 						Utils.DbgOutExc("WriteFeedsThread::Run()", ex);
+						MessageBox.Show("Error while saving feeds:\n\n" + ex.Message, "FeedReader", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 
 					XmlTextWriter writer = null;
@@ -149,6 +155,7 @@ namespace com.comshak.FeedReader
 					catch (Exception ex)
 					{
 						Utils.DbgOutExc("WriteFeedsThread::Run()", ex);
+						MessageBox.Show("Error while saving feeds:\n\n" + ex.Message, "FeedReader", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 					finally
 					{
