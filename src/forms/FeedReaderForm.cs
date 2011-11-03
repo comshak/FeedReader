@@ -689,6 +689,9 @@ namespace com.comshak.FeedReader
 					//Utils.MoveFile(form.TempFeedFile, );
 
 					FeedNode feedNode = new FeedNode(form.FeedTitle, strFeedUrl, m_feedNodeRightClicked, false);
+					feedNode.HtmlUrl = form.HtmlUrl;
+					feedNode.Description = form.FeedDescription;
+
 					m_feedNodeRightClicked.AddChildNode(feedNode);
 
 					OnEnd_ParseFeeds();

@@ -54,9 +54,10 @@ namespace com.comshak.FeedReader
 
 		public FeedNode(string strTitle, string strXmlUrl, FeedNode parent, bool bFolder)
 		{
-			m_strTitle  = strTitle;
-			m_parent    = parent;
-			m_bFolder   = bFolder;
+			m_strTitle = strTitle;
+			m_strText  = strTitle;
+			m_parent   = parent;
+			m_bFolder  = bFolder;
 			if (!bFolder)
 			{
 				m_strXmlUrl = strXmlUrl;

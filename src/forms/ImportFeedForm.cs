@@ -13,6 +13,7 @@ namespace com.comshak.FeedReader
 	/// </summary>
 	public class ImportFeedForm : System.Windows.Forms.Form
 	{
+		#region Fields
 		private System.Windows.Forms.Label lblFeedUrl;
 		private System.Windows.Forms.TextBox txtFeedUrl;
 		private System.Windows.Forms.Label lblHtmlUrl;
@@ -31,6 +32,7 @@ namespace com.comshak.FeedReader
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
+		#endregion
 
 		public ImportFeedForm()
 		{
@@ -232,6 +234,7 @@ namespace com.comshak.FeedReader
 		}
 		#endregion
 
+		#region Properties
 		public string FeedUrl
 		{
 			get { return txtFeedUrl.Text; }
@@ -242,10 +245,21 @@ namespace com.comshak.FeedReader
 			get { return txtTitle.Text; }
 		}
 
+		public string HtmlUrl
+		{
+			get { return txtHtmlUrl.Text; }
+		}
+
+		public string FeedDescription
+		{
+			get { return txtDescription.Text; }
+		}
+
 		public string TempFeedFile
 		{
 			get { return m_strTempFeedFile; }
 		}
+		#endregion
 
 		private void btnAutoDiscover_Click(object sender, System.EventArgs e)
 		{
