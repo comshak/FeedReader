@@ -364,12 +364,14 @@ namespace com.comshak.FeedReader
 			}
 
 			TreeNode tnOld = (TreeNode) Tag;
-			tnOld.Remove();		// remove the treenode from the old folder
+			tnOld.Remove();					// remove the treenode from the old folder
 
-			m_parent = fnDest;
-			fnDest.AddChildNode(this);
+			m_parent.DeleteChildNode(this);	// remove the feednode from this folder
 
-			TreeNode tnDest = (TreeNode) fnDest.Tag;
+			m_parent = fnDest;				// parent this node to the destination feednode
+			fnDest.AddChildNode(this);		// add this node to the destination feednode
+
+			TreeNode tnDest = (TreeNode) fnDest.Tag;	// the destination folder's treenode
 			tnDest.Nodes.Clear();
 
 			fnDest.PopulateTreeNodes(tnDest, tvFeeds);

@@ -51,7 +51,10 @@ namespace com.comshak.FeedReader
 							strGroupName = reader.GetAttribute("title");
 							FeedNode node = new FeedNode(strGroupName, null, nodeCurrent, true);
 							nodeCurrent.AddChildNode(node);
-							nodeCurrent = node;
+							if (!reader.IsEmptyElement)
+							{
+								nodeCurrent = node;
+							}
 						}
 						else if (strElementName == "outline" && reader.HasAttributes)
 						{

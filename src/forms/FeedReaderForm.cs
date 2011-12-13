@@ -156,12 +156,12 @@ namespace com.comshak.FeedReader
 			this.menuItemProperties = new System.Windows.Forms.MenuItem();
 			this.splitterV = new System.Windows.Forms.Splitter();
 			this.listViewHeadlines = new System.Windows.Forms.ListView();
-			this.colHdrIcon = new System.Windows.Forms.ColumnHeader();
-			this.colHdrTitle = new System.Windows.Forms.ColumnHeader();
-			this.colHdrPublished = new System.Windows.Forms.ColumnHeader();
-			this.colHdrReceived = new System.Windows.Forms.ColumnHeader();
-			this.colHdrAuthor = new System.Windows.Forms.ColumnHeader();
-			this.colHdrCategory = new System.Windows.Forms.ColumnHeader();
+			this.colHdrIcon = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colHdrTitle = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colHdrPublished = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colHdrReceived = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colHdrAuthor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colHdrCategory = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.splitterH = new System.Windows.Forms.Splitter();
 			this.axWebBrowser = new AxInterop.SHDocVw.AxWebBrowser();
 			this.toolbar = new System.Windows.Forms.ToolStrip();
@@ -257,13 +257,13 @@ namespace com.comshak.FeedReader
 			this.treeViewFeeds.Name = "treeViewFeeds";
 			this.treeViewFeeds.Size = new System.Drawing.Size(128, 159);
 			this.treeViewFeeds.TabIndex = 1;
-			this.treeViewFeeds.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeViewFeeds_DragDrop);
-			this.treeViewFeeds.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewFeeds_AfterSelect);
-			this.treeViewFeeds.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeViewFeeds_MouseDown);
-			this.treeViewFeeds.DragEnter += new System.Windows.Forms.DragEventHandler(this.treeViewFeeds_DragEnter);
-			this.treeViewFeeds.KeyUp += new System.Windows.Forms.KeyEventHandler(this.treeViewFeeds_KeyUp);
 			this.treeViewFeeds.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.treeViewFeeds_ItemDrag);
+			this.treeViewFeeds.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewFeeds_AfterSelect);
+			this.treeViewFeeds.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeViewFeeds_DragDrop);
+			this.treeViewFeeds.DragEnter += new System.Windows.Forms.DragEventHandler(this.treeViewFeeds_DragEnter);
 			this.treeViewFeeds.DragOver += new System.Windows.Forms.DragEventHandler(this.treeViewFeeds_DragOver);
+			this.treeViewFeeds.KeyUp += new System.Windows.Forms.KeyEventHandler(this.treeViewFeeds_KeyUp);
+			this.treeViewFeeds.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeViewFeeds_MouseDown);
 			// 
 			// contextMenu
 			// 
@@ -350,10 +350,10 @@ namespace com.comshak.FeedReader
 			this.listViewHeadlines.TabIndex = 2;
 			this.listViewHeadlines.UseCompatibleStateImageBehavior = false;
 			this.listViewHeadlines.View = System.Windows.Forms.View.Details;
-			this.listViewHeadlines.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listViewHeadlines_MouseClick);
-			this.listViewHeadlines.SelectedIndexChanged += new System.EventHandler(this.listViewHeadlines_SelectedIndexChanged);
-			this.listViewHeadlines.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listViewHeadlines_MouseMove);
 			this.listViewHeadlines.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.listViewHeadlines_ColumnWidthChanging);
+			this.listViewHeadlines.SelectedIndexChanged += new System.EventHandler(this.listViewHeadlines_SelectedIndexChanged);
+			this.listViewHeadlines.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listViewHeadlines_MouseClick);
+			this.listViewHeadlines.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listViewHeadlines_MouseMove);
 			// 
 			// colHdrIcon
 			// 
@@ -402,10 +402,10 @@ namespace com.comshak.FeedReader
 			this.axWebBrowser.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWebBrowser.OcxState")));
 			this.axWebBrowser.Size = new System.Drawing.Size(628, 0);
 			this.axWebBrowser.TabIndex = 5;
-			this.axWebBrowser.BeforeNavigate2 += new AxInterop.SHDocVw.DWebBrowserEvents2_BeforeNavigate2EventHandler(this.axWebBrowser_BeforeNavigate2);
 			this.axWebBrowser.StatusTextChange += new AxInterop.SHDocVw.DWebBrowserEvents2_StatusTextChangeEventHandler(this.axWebBrowser_StatusTextChange);
-			this.axWebBrowser.DownloadBegin += new System.EventHandler(this.axWebBrowser_DownloadBegin);
 			this.axWebBrowser.CommandStateChange += new AxInterop.SHDocVw.DWebBrowserEvents2_CommandStateChangeEventHandler(this.axWebBrowser_CommandStateChange);
+			this.axWebBrowser.DownloadBegin += new System.EventHandler(this.axWebBrowser_DownloadBegin);
+			this.axWebBrowser.BeforeNavigate2 += new AxInterop.SHDocVw.DWebBrowserEvents2_BeforeNavigate2EventHandler(this.axWebBrowser_BeforeNavigate2);
 			this.axWebBrowser.NavigateComplete2 += new AxInterop.SHDocVw.DWebBrowserEvents2_NavigateComplete2EventHandler(this.axWebBrowser_NavigateComplete2);
 			this.axWebBrowser.DocumentComplete += new AxInterop.SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(this.axWebBrowser_DocumentComplete);
 			// 
@@ -435,9 +435,9 @@ namespace com.comshak.FeedReader
 			this.browserHeader1.Name = "browserHeader1";
 			this.browserHeader1.Size = new System.Drawing.Size(628, 31);
 			this.browserHeader1.TabIndex = 6;
-			this.browserHeader1.ForwardButtonPressed += new System.EventHandler(this.browserHeader1_ForwardButtonPressed);
 			this.browserHeader1.GoButtonPressed += new System.EventHandler(this.browserHeader1_GoButtonPressed);
 			this.browserHeader1.BackButtonPressed += new System.EventHandler(this.browserHeader1_BackButtonPressed);
+			this.browserHeader1.ForwardButtonPressed += new System.EventHandler(this.browserHeader1_ForwardButtonPressed);
 			// 
 			// FeedReaderForm
 			// 
@@ -455,8 +455,8 @@ namespace com.comshak.FeedReader
 			this.Menu = this.mainMenu;
 			this.Name = "FeedReaderForm";
 			this.Text = "FeedReader";
-			this.Load += new System.EventHandler(this.FeedReaderForm_Load);
 			this.Closed += new System.EventHandler(this.FeedReaderForm_Closed);
+			this.Load += new System.EventHandler(this.FeedReaderForm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.pnlStatus)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pnlProgress)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.axWebBrowser)).EndInit();
@@ -1108,28 +1108,21 @@ namespace com.comshak.FeedReader
 		/// <param name="e"></param>
 		private void treeViewFeeds_DragOver(object sender, System.Windows.Forms.DragEventArgs e)
 		{
-			if (m_dragNode == null)
-			{	// If an object other than a FeedNode is being dragged...
-				e.Effect = DragDropEffects.None;
-				return;
-			}
-
-			TreeNode tn = FindTreeNode(e.X, e.Y);
-			if (tn == null)
+			if (m_dragNode != null)
 			{
-				return;
+				TreeNode tn = FindTreeNode(treeViewFeeds, e.X, e.Y);
+				if (tn != null)
+				{
+					FeedNode fn = (FeedNode)tn.Tag;
+					if (fn.IsFolder && fn != m_dragNode.Parent)
+					{
+						// Dropping into a folder other than the current folder the node is in...
+						e.Effect = DragDropEffects.Move;
+						return;
+					}
+				}
 			}
-
-			FeedNode fn = (FeedNode)tn.Tag;
-
-			if (fn.IsFolder)
-			{
-				e.Effect = DragDropEffects.Move;
-			}
-			else
-			{
-				e.Effect = DragDropEffects.None;
-			}
+			e.Effect = DragDropEffects.None;
 		}
 
 		/// <summary>
@@ -1161,13 +1154,16 @@ namespace com.comshak.FeedReader
 			}
 
 			// determine the node we are dropping into from the coordinates of the DragEvent argument
-			TreeNode dropTreeNode = FindTreeNode(e.X, e.Y);
-			FeedNode dropFeedNode = (FeedNode)dropTreeNode.Tag;
-
-			if (m_dragNode.MoveTo(dropFeedNode, treeViewFeeds))
+			TreeNode dropTreeNode = FindTreeNode(treeViewFeeds, e.X, e.Y);
+			if (dropTreeNode != null)
 			{
-				//this.Invalidate(new Region(this.ClientRectangle)); // redraw the treeview
-				treeViewFeeds.SelectedNode = dropTreeNode; // select the drop node as the current selection
+				FeedNode dropFeedNode = (FeedNode)dropTreeNode.Tag;
+
+				if (m_dragNode.MoveTo(dropFeedNode, treeViewFeeds))
+				{
+					//this.Invalidate(new Region(this.ClientRectangle)); // redraw the treeview
+					treeViewFeeds.SelectedNode = dropTreeNode; // select the drop node as the current selection
+				}
 			}
 			m_dragNode = null;
 		}
@@ -1175,26 +1171,13 @@ namespace com.comshak.FeedReader
 		/// <summary>
 		/// Finds a tree node in the TreeView by the node's coordinates.
 		/// </summary>
+		/// <param name="treeView"></param>
 		/// <param name="x"></param>
 		/// <param name="y"></param>
 		/// <returns></returns>
-		protected TreeNode FindTreeNode(int x, int y)
+		protected TreeNode FindTreeNode(TreeView treeView, int x, int y)
 		{
-			TreeNode aNode = (TreeNode)m_rootFeedNode.Tag;
-			
-			Point pt = new Point(x,y);
-			pt = PointToClient(pt);
-
-			while (aNode != null)
-			{
-				if (aNode.Bounds.Contains(pt))
-				{
-					return aNode;
-				}
-				aNode = aNode.NextVisibleNode;
-			}
-
-			return null;
+			return treeView.GetNodeAt(treeViewFeeds.PointToClient(new Point(x, y)));
 		}
 
 		/// <summary>
