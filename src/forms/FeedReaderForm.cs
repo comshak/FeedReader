@@ -64,6 +64,7 @@ namespace com.comshak.FeedReader
 		private ToolStrip toolbar;
 		private ToolStripButton tsbNewFeed;
 		private com.comshak.FeedReader.FeedNode		m_dragNode;		// Node being dragged
+		private object								m_WebBrowserPtr;
 		#endregion
 
 		public FeedNode RootFeedNode
@@ -100,13 +101,15 @@ namespace com.comshak.FeedReader
 			lvImgList.Images.Add(Image.FromStream(a.GetManifestResourceStream("FeedReader.res.hourglass.ico")));	// 3
 			listViewHeadlines.SmallImageList = lvImgList;
 			listViewHeadlines.Height = (this.ClientSize.Height - statusBarMain.Height) / 2;
+
 			treeViewFeeds.Width = 250;
+
 			colHdrIcon.Width = 18;
 			colHdrTitle.Width = 285;
-			colHdrPublished.Width = 130;
-			colHdrReceived.Width = 130;
+			colHdrPublished.Width = 134;
+			colHdrReceived.Width = 134;
 			colHdrAuthor.Width = 100;
-			colHdrCategory.Width = 80;
+			colHdrCategory.Width = 120;
 		}
 
 		/// <summary>
@@ -176,16 +179,16 @@ namespace com.comshak.FeedReader
 			// mainMenu
 			// 
 			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem1,
-            this.menuItemHelp});
+			this.menuItem1,
+			this.menuItemHelp});
 			// 
 			// menuItem1
 			// 
 			this.menuItem1.Index = 0;
 			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemSave,
-            this.menuItemFileSep1,
-            this.menuItemExit});
+			this.menuItemSave,
+			this.menuItemFileSep1,
+			this.menuItemExit});
 			this.menuItem1.Text = "&File";
 			// 
 			// menuItemSave
@@ -209,8 +212,8 @@ namespace com.comshak.FeedReader
 			// 
 			this.menuItemHelp.Index = 1;
 			this.menuItemHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemGC,
-            this.menuItemAbout});
+			this.menuItemGC,
+			this.menuItemAbout});
 			this.menuItemHelp.Text = "&Help";
 			// 
 			// menuItemGC
@@ -230,8 +233,8 @@ namespace com.comshak.FeedReader
 			this.statusBarMain.Location = new System.Drawing.Point(0, 184);
 			this.statusBarMain.Name = "statusBarMain";
 			this.statusBarMain.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
-            this.pnlStatus,
-            this.pnlProgress});
+			this.pnlStatus,
+			this.pnlProgress});
 			this.statusBarMain.ShowPanels = true;
 			this.statusBarMain.Size = new System.Drawing.Size(759, 22);
 			this.statusBarMain.TabIndex = 0;
@@ -268,14 +271,14 @@ namespace com.comshak.FeedReader
 			// contextMenu
 			// 
 			this.contextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemUpdate,
-            this.menuItemSep1,
-            this.menuItemImport,
-            this.menuItemNewFolder,
-            this.menuItemSep2,
-            this.menuItemDelete,
-            this.menuItemSep3,
-            this.menuItemProperties});
+			this.menuItemUpdate,
+			this.menuItemSep1,
+			this.menuItemImport,
+			this.menuItemNewFolder,
+			this.menuItemSep2,
+			this.menuItemDelete,
+			this.menuItemSep3,
+			this.menuItemProperties});
 			// 
 			// menuItemUpdate
 			// 
@@ -334,12 +337,12 @@ namespace com.comshak.FeedReader
 			// listViewHeadlines
 			// 
 			this.listViewHeadlines.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colHdrIcon,
-            this.colHdrTitle,
-            this.colHdrPublished,
-            this.colHdrReceived,
-            this.colHdrAuthor,
-            this.colHdrCategory});
+			this.colHdrIcon,
+			this.colHdrTitle,
+			this.colHdrPublished,
+			this.colHdrReceived,
+			this.colHdrAuthor,
+			this.colHdrCategory});
 			this.listViewHeadlines.Dock = System.Windows.Forms.DockStyle.Top;
 			this.listViewHeadlines.FullRowSelect = true;
 			this.listViewHeadlines.HideSelection = false;
@@ -405,14 +408,13 @@ namespace com.comshak.FeedReader
 			this.axWebBrowser.StatusTextChange += new AxInterop.SHDocVw.DWebBrowserEvents2_StatusTextChangeEventHandler(this.axWebBrowser_StatusTextChange);
 			this.axWebBrowser.CommandStateChange += new AxInterop.SHDocVw.DWebBrowserEvents2_CommandStateChangeEventHandler(this.axWebBrowser_CommandStateChange);
 			this.axWebBrowser.DownloadBegin += new System.EventHandler(this.axWebBrowser_DownloadBegin);
-			this.axWebBrowser.BeforeNavigate2 += new AxInterop.SHDocVw.DWebBrowserEvents2_BeforeNavigate2EventHandler(this.axWebBrowser_BeforeNavigate2);
 			this.axWebBrowser.NavigateComplete2 += new AxInterop.SHDocVw.DWebBrowserEvents2_NavigateComplete2EventHandler(this.axWebBrowser_NavigateComplete2);
 			this.axWebBrowser.DocumentComplete += new AxInterop.SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(this.axWebBrowser_DocumentComplete);
 			// 
 			// toolbar
 			// 
 			this.toolbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsbNewFeed});
+			this.tsbNewFeed});
 			this.toolbar.Location = new System.Drawing.Point(0, 0);
 			this.toolbar.Name = "toolbar";
 			this.toolbar.Size = new System.Drawing.Size(759, 25);
@@ -464,7 +466,6 @@ namespace com.comshak.FeedReader
 			this.toolbar.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
-
 		}
 		#endregion
 
@@ -473,7 +474,8 @@ namespace com.comshak.FeedReader
 			ParseFeedsThread thread = new ParseFeedsThread(this);
 			thread.Start();
 
-			axWebBrowser.Silent = true;		// Suppress script errors!
+			axWebBrowser.Silent = true;					// Suppress script errors!
+			m_WebBrowserPtr = axWebBrowser.GetOcx();	// The top-level control
 
 			NavigateTo("about:blank");
 		}
@@ -1110,11 +1112,11 @@ namespace com.comshak.FeedReader
 		{
 			if (m_dragNode != null)
 			{
-				TreeNode tn = FindTreeNode(treeViewFeeds, e.X, e.Y);
-				if (tn != null)
+				TreeNode tnBelow = FindTreeNode(treeViewFeeds, e.X, e.Y);
+				if (tnBelow != null)
 				{
-					FeedNode fn = (FeedNode)tn.Tag;
-					if (fn.IsFolder && fn != m_dragNode.Parent)
+					FeedNode fnBelow = (FeedNode)tnBelow.Tag;
+					if (fnBelow.IsFolder && fnBelow != m_dragNode && fnBelow != m_dragNode.Parent)
 					{
 						// Dropping into a folder other than the current folder the node is in...
 						e.Effect = DragDropEffects.Move;
@@ -1246,14 +1248,13 @@ namespace com.comshak.FeedReader
 			axWebBrowser.GoForward();
 		}
 
-		private void axWebBrowser_BeforeNavigate2(object sender, AxSHDocVw.DWebBrowserEvents2_BeforeNavigate2Event e)
-		{
-			//browserHeader1.Address = (string) e.uRL;
-		}
-
 		private void axWebBrowser_NavigateComplete2(object sender, AxSHDocVw.DWebBrowserEvents2_NavigateComplete2Event e)
 		{
-			browserHeader1.Address = (string) e.uRL;
+			if (e.pDisp == m_WebBrowserPtr)
+			{
+				// Only change the url in the address bar for the top-level frame's NavigateComplete
+				browserHeader1.Address = (string)e.uRL;
+			}
 		}
 
 		/// <summary>
