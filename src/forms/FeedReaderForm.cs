@@ -634,6 +634,7 @@ namespace com.comshak.FeedReader
 				menuItemNewFolder.Visible = false;
 				menuItemSep2.Visible = true;
 				menuItemDelete.Text = "&Delete feed";
+				menuItemDelete.Enabled = true;
 			}
 		}
 

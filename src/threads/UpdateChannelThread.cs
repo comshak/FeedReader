@@ -14,7 +14,7 @@ namespace com.comshak.FeedReader
 		private FeedFormat     m_feedFormat;
 		private string         m_strTempFeedFile;
 
-		static NodeContent[] s_arrAtomDesc = new NodeContent[]
+		static readonly NodeContent[] s_arrAtomDesc = new NodeContent[]
 		{
 			new NodeContent("atom:content[@type=\"application/xhtml+xml\"]",           NCEncoding.String, NCType.Xml),
 			new NodeContent("atom:content[@type=\"text/html\" and @mode=\"escaped\"]", NCEncoding.String, NCType.Xml),
@@ -35,7 +35,7 @@ namespace com.comshak.FeedReader
 //			"atom:summary[@type=\"html\"]"
 //		};
 		//-----------------------
-		static NodeContent[] s_arrAtomPubDate = new NodeContent[]
+		static readonly NodeContent[] s_arrAtomPubDate = new NodeContent[]
 		{
 			new NodeContent("atom:issued",    NCEncoding.String, NCType.Text),
 			new NodeContent("atom:published", NCEncoding.String, NCType.Text),
@@ -48,10 +48,11 @@ namespace com.comshak.FeedReader
 //			"atom:updated"
 //		};
 		//-----------------------
-		static NodeContent[] s_arrRssAuthor = new NodeContent[]
+		static readonly NodeContent[] s_arrRssAuthor = new NodeContent[]
 		{
-			new NodeContent("author",     NCEncoding.String, NCType.Text),
-			new NodeContent("dc:creator", NCEncoding.String, NCType.Text)
+			new NodeContent("author",       NCEncoding.String, NCType.Text),
+			new NodeContent("dc:creator",   NCEncoding.String, NCType.Text),
+			new NodeContent("dc:publisher", NCEncoding.String, NCType.Text)
 		};
 
 //		static string[] s_arrRssAuthorTypes = new string[] {
@@ -59,7 +60,7 @@ namespace com.comshak.FeedReader
 //			"dc:creator"
 //		};
 		//-----------------------
-		static NodeContent[] s_arrRssDesc = new NodeContent[]
+		static readonly NodeContent[] s_arrRssDesc = new NodeContent[]
 		{
 			new NodeContent("content:encoded", NCEncoding.String, NCType.Text),
 			new NodeContent("description",     NCEncoding.String, NCType.Text)
@@ -70,7 +71,7 @@ namespace com.comshak.FeedReader
 //			"description"
 //		};
 		//-----------------------
-		static NodeContent[] s_arrRssPubDate = new NodeContent[]
+		static readonly NodeContent[] s_arrRssPubDate = new NodeContent[]
 		{
 			new NodeContent("pubDate", NCEncoding.String, NCType.Text),
 			new NodeContent("dc:date", NCEncoding.String, NCType.Text)
